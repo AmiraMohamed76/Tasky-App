@@ -1,16 +1,8 @@
-# tasky_app
+# Tasky App – Daily Task Manager
+A clean and efficient To-Do application designed to help users organize, track, and complete daily tasks withease. The app focuses on simplicity, productivity, and a smooth user experience, making task management clear and stress-free.
 
-A new Flutter project.
+Key Features:
 
-## Getting Started
+Create, edit, and delete daily tasks Mark tasks as completed Clean and intuitive UI Designed for productivity and focus Lightweight and easy to use
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+This project is ideal for practicing task management logic, clean UI design, and state management concepts.

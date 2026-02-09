@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tasky_app/screens/home_screen.dart';
+import 'package:tasky_app/screens/main_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
    WelcomeScreen({super.key});
@@ -12,7 +12,7 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF181818),
+
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -118,7 +118,7 @@ class WelcomeScreen extends StatelessWidget {
                                 context,
                                 MaterialPageRoute(
                                   builder: (BuildContext context) {
-                                    return HomeScreen();
+                                    return MainScreen();
                                   },
                                 ),
                               );

@@ -78,7 +78,7 @@ class _MainScreenState extends State<MainScreen> {
         ],
         backgroundColor: Color(0xFF181818),
       ),
-      body: _screen[_currentIndex],
+      body: SafeArea(child: _screen[_currentIndex]),
     );
   }
 }

@@ -10,14 +10,16 @@ class TaskListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Tasks ${tasks.isEmpty}");
     return  tasks.isEmpty
         ? Center(
       child: Text(
         emptyMessage ?? "No Data",
         style: TextStyle(fontSize: 24, color: Color(0xFFFFFCFC)),
       ),
-    )
-        : ListView.separated(
+    ) : ListView.separated(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
       itemCount: tasks.length,
       padding: EdgeInsets.only(bottom: 50),
       itemBuilder: (BuildContext context, int index) {

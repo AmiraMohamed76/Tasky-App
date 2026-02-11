@@ -14,7 +14,7 @@ class TasksScreen extends StatefulWidget {
 
 class _TasksScreenState extends State<TasksScreen> {
   bool isLoading = false;
-  List<TaskModel> tasks = [];
+  List<TaskModel> todoTasks = [];
 
   @override
   void initState() {
@@ -31,45 +31,70 @@ class _TasksScreenState extends State<TasksScreen> {
     final finalTasks = pref.getString("tasks");
 
     if (finalTasks != null) {
-      final taskDecoded = jsonDecode(finalTasks) as List<dynamic>;
+      final taskAfterDecode = jsonDecode(finalTasks) as List<
+          dynamic>; // to covert string to List<Map<String, dynamic>>
       setState(() {
-        tasks = taskDecoded
-            .map((element) => TaskModel.fromJson(element))
-            .where((element) => element.isDone == false)
+        todoTasks = taskAfterDecode
+            .map((element) =>
+            TaskModel.fromJson(
+            element)) // convert List<Map<String, dynamic>> to List<Model>
+            .where((element) => !element.isDone) // filter allDataList to get items which has isDone = false
             .toList();
-        isLoading = false;
       });
     }
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("To Do Tasks")),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: isLoading
-            ? Center(child: CircularProgressIndicator(color: Color(0xFFFFFCFC)))
-            : TaskListWidget(
-                tasks: tasks,
-                onTap: (bool? value, int? index) async {
-                  setState(() {
-                    tasks[index!].isDone = value ?? false;
-                  });
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Text("To Do Tasks",
+            style: TextStyle(
+                color: Color(0xFFFFFCFC),
+                fontSize: 20
+            ),),
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: isLoading
+                ? Center(
+                child: CircularProgressIndicator(color: Color(0xFFFFFCFC)))
+                : TaskListWidget(
+              tasks: todoTasks,
+              onTap: (bool? value, int? index) async {
+                setState(() {
+                  todoTasks[index!].isDone = value ?? false;
+                });
 
-                  // to save isDone in sharedPref
-                  final pref = await SharedPreferences.getInstance();
-                  final updatedTasksList = tasks
-                      .map((element) => element.toJson())
+                // to save isDone in sharedPref
+                final pref = await SharedPreferences.getInstance();
+                final allData = pref.getString("tasks");
+                // to update changed item not change all list
+                if (allData != null) {
+                  List<TaskModel> allDataList = (jsonDecode(allData) as List)
+                      .map((element) => TaskModel.fromJson(element))
                       .toList();
-                  await pref.setString("tasks", jsonEncode(updatedTasksList));
-
+                  final newIndex = allDataList.indexWhere((e) =>
+                  e.id == todoTasks[index!].id);
+                  allDataList[newIndex] = todoTasks[index!];
+                  await pref.setString("tasks", jsonEncode(allDataList));
                   // To update screen after check task
                   _loadTask();
-                },
-                emptyMessage: "No Tasks Found",
-              ),
-      ),
+                }
+
+              },
+              emptyMessage: "No Tasks Found",
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

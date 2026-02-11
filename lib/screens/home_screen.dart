@@ -5,7 +5,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tasky_app/model/task_model.dart';
 import 'package:tasky_app/screens/add_task_screen.dart';
-import 'package:tasky_app/widgets/task_list_widget.dart';
+import 'package:tasky_app/widgets/achieved_task_widget.dart';
+import 'package:tasky_app/widgets/high_priority_tasks_widget.dart';
+import 'package:tasky_app/widgets/sliver_task_list_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,6 +21,9 @@ class _HomeScreenState extends State<HomeScreen> {
   List<TaskModel> tasks = [];
   bool isChecked = false;
   bool isLoading = false;
+  int totalTasks = 0;
+  int doneTasks = 0;
+  double precent = 0;
 
   @override
   void initState() {
@@ -45,112 +50,147 @@ class _HomeScreenState extends State<HomeScreen> {
 
     if (tasksList != null) {
       final tasksListDecode = jsonDecode(tasksList) as List<dynamic>;
-      print("Tasks $tasksListDecode");
       setState(() {
         tasks = tasksListDecode
             .map((element) => TaskModel.fromJson(element))
             .toList();
-
-        isLoading = false;
+        _calculatePrecent();
       });
     }
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  _calculatePrecent() {
+    totalTasks = tasks.length;
+    doneTasks = tasks
+        .where((e) => e.isDone)
+        .length;
+
+    precent = totalTasks == 0 ? 0 : (doneTasks / totalTasks);
+  }
+
+  _doneTask(bool? value, int? index) async {
+    setState(() {
+      tasks[index!].isDone = value ?? false;
+      _calculatePrecent();
+    });
+
+    // to save isDone in sharedPref
+    final pref = await SharedPreferences.getInstance();
+
+    /// dealing with the full list so when change isDone State will change in fullList
+    /// on the contrary in todoScreen and completeScreen i need to know the actual index from fullList
+    /// and index in the screenList and match them to update correct item
+    final updatedTasksList = tasks.map((element) => element.toJson()).toList();
+    await pref.setString("tasks", jsonEncode(updatedTasksList));
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                spacing: 8,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CircleAvatar(
-                    backgroundImage: AssetImage("assets/images/person.png"),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
+                    spacing: 8,
                     children: [
-                      Text(
-                        "Good Evening ,$username",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                          color: Color(0xFFFFFCFC),
-                        ),
+                      CircleAvatar(
+                        backgroundImage: AssetImage("assets/images/person.png"),
                       ),
-                      Text(
-                        "One task at a time.One step closer.",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14,
-                          color: Color(0xFFC6C6C6),
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Good Evening ,$username",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16,
+                              color: Color(0xFFFFFCFC),
+                            ),
+                          ),
+                          Text(
+                            "One task at a time.One step closer.",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                              color: Color(0xFFC6C6C6),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-              SizedBox(height: 16),
-              Text(
-                "Yuhuu ,Your work Is",
-                style: TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.w400,
-                  color: Color(0xFFFFFCFC),
-                ),
-              ),
-              Row(
-                children: [
+                  SizedBox(height: 16),
                   Text(
-                    "almost done ! ",
+                    "Yuhuu ,Your work Is",
                     style: TextStyle(
                       fontSize: 32,
                       fontWeight: FontWeight.w400,
                       color: Color(0xFFFFFCFC),
                     ),
                   ),
-                  SvgPicture.asset("assets/images/waving_hand.svg"),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 24, bottom: 16),
-                child: Text(
-                  "My Tasks",
-                  style: TextStyle(color: Color(0xFFFFFCFC), fontSize: 20),
-                ),
-              ),
-              Expanded(
-                child: isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
+                  Row(
+                    children: [
+                      Text(
+                        "almost done ! ",
+                        style: TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.w400,
                           color: Color(0xFFFFFCFC),
                         ),
-                      )
-                    : TaskListWidget(
-                        tasks: tasks,
-                        onTap: (bool? value, int? index) async {
-                          setState(() {
-                            tasks[index!].isDone = value ?? false;
-                          });
-
-                          // to save isDone in sharedPref
-                          final pref = await SharedPreferences.getInstance();
-                          final updatedTasksList = tasks
-                              .map((element) => element.toJson())
-                              .toList();
-                          await pref.setString(
-                            "tasks",
-                            jsonEncode(updatedTasksList),
-                          );
-                        },
                       ),
+                      SvgPicture.asset("assets/images/waving_hand.svg"),
+                    ],
+                  ),
+                  AchievedTaskWidget(
+                    totalTasks: totalTasks,
+                    doneTasks: doneTasks,
+                    precent: precent,
+                  ),
+                  SizedBox(height: 8),
+                  HighPriorityTasksWidget(
+                    tasks: tasks,
+                    onTap: (bool? value, int? index) {
+                      _doneTask(value, index);
+                    },
+                    refresh: () {
+                      _loadTasks();
+                    },
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24, bottom: 16),
+                    child: Text(
+                      "My Tasks",
+                      style: TextStyle(color: Color(0xFFFFFCFC), fontSize: 20),
+                    ),
+                  ),
+
+                  isLoading
+                      ? SliverToBoxAdapter(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: Color(0xFFFFFCFC),
+                      ),
+                    ),
+                  )
+                      : SliverTaskListWidget(
+                    tasks: tasks,
+                    onTap: (bool? value, int? index) {
+                      _doneTask(value, index);
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
+            )
+          ],
         ),
       ),
       floatingActionButton: SizedBox(

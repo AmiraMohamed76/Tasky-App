@@ -33,6 +33,32 @@ class MyApp extends StatelessWidget {
           ),
           iconTheme: IconThemeData(color: Color(0xFFFFFCFC)),
           centerTitle: false,
+        ),
+        switchTheme: SwitchThemeData(
+          trackColor: WidgetStateProperty.resolveWith((states){
+            if(states.contains(WidgetState.selected)){
+              return Color(0xFF15B86C);
+            }
+            return Colors.white;
+          }),
+          thumbColor: WidgetStateProperty.resolveWith((states){
+            if(states.contains(WidgetState.selected)){
+              return Colors.white;
+            }
+            return Color(0xFF9E9E9E);
+          }),
+          trackOutlineColor: WidgetStateProperty.resolveWith((states){
+            if(states.contains(WidgetState.selected)){
+              return null;
+            }
+            return Color(0xFF9E9E9E);
+          }),
+          trackOutlineWidth: WidgetStateProperty.resolveWith((states){
+            if(states.contains(WidgetState.selected)){
+              return 0;
+            }
+            return 2;
+          }),
         )
       ),
       home: username == null ? WelcomeScreen() : MainScreen(),

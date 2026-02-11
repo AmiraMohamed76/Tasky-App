@@ -117,7 +117,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                   isHighPriority = value;
                                 });
                               },
-                              activeTrackColor: Color(0xFF15B86C),
+                              // activeTrackColor: Color(0xFF15B86C),
                             ),
                           ],
                         ),
@@ -128,24 +128,36 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 ElevatedButton.icon(
                   onPressed: () async {
                     if (_key.currentState?.validate() ?? false) {
+
+                      // save data (SharedPreference)
+                      final pref = await SharedPreferences.getInstance();
+
+                      // check by key {tasks} -> String?
+                      final taskJson = pref.getString("tasks");
+
+                      List<dynamic> tasksList = []; // List<Map<String, dynamic>>
+
+                      // check if there is tasks and decode string to map
+                      if (taskJson != null) {
+                        tasksList = jsonDecode(taskJson);
+                      }
+
+                      // to create TaskModel to save in sharedPreference
                       final task = TaskModel(
+                        id: tasksList.length +1,
                         taskName: taskNameController.text,
                         taskDescription: taskDescriptionController.text,
                         isHighPriority: isHighPriority,
                       );
 
-                      final pref = await SharedPreferences.getInstance();
-                      final taskJson = pref.getString("tasks"); // check if there are old tasks before adding new task
-
-                      List<dynamic> tasksList = [];
-                      if (taskJson != null) {
-                        tasksList = jsonDecode(taskJson);
-                      }
+                      // to covert data from Model to Map<key, value>
                       tasksList.add(task.toJson());
 
+                      // covert this list to string to save it in SharedPreference
                       final tasksListEncode = jsonEncode(tasksList);
                       await pref.setString("tasks", tasksListEncode);
 
+                      // navigation with result (true) value to check on this result on HomeScreen to check if add task will loadTasks again to update list
                       Navigator.of(context).pop(true);
                     }
                   },

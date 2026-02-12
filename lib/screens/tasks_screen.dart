@@ -1,7 +1,6 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tasky_app/core/services/preferences_manager.dart';
 import 'package:tasky_app/model/task_model.dart';
 import 'package:tasky_app/widgets/task_list_widget.dart';
 
@@ -27,8 +26,7 @@ class _TasksScreenState extends State<TasksScreen> {
     setState(() {
       isLoading = true;
     });
-    final pref = await SharedPreferences.getInstance();
-    final finalTasks = pref.getString("tasks");
+    final finalTasks = PreferencesManager().getString("tasks");
 
     if (finalTasks != null) {
       final taskAfterDecode = jsonDecode(finalTasks) as List<
@@ -52,13 +50,16 @@ class _TasksScreenState extends State<TasksScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.all(18.0),
-          child: Text("To Do Tasks",
-            style: TextStyle(
-                color: Color(0xFFFFFCFC),
-                fontSize: 20
-            ),),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.all(18.0),
+            child: Text("To Do Tasks",
+              style: TextStyle(
+                  color: Color(0xFF161F1B),
+                  fontSize: 20
+              ),
+            ),
+          ),
         ),
         Expanded(
           child: Padding(
@@ -73,9 +74,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   todoTasks[index!].isDone = value ?? false;
                 });
 
-                // to save isDone in sharedPref
-                final pref = await SharedPreferences.getInstance();
-                final allData = pref.getString("tasks");
+                final allData = PreferencesManager().getString("tasks");
                 // to update changed item not change all list
                 if (allData != null) {
                   List<TaskModel> allDataList = (jsonDecode(allData) as List)
@@ -84,7 +83,7 @@ class _TasksScreenState extends State<TasksScreen> {
                   final newIndex = allDataList.indexWhere((e) =>
                   e.id == todoTasks[index!].id);
                   allDataList[newIndex] = todoTasks[index!];
-                  await pref.setString("tasks", jsonEncode(allDataList));
+                  await PreferencesManager().setString("tasks", jsonEncode(allDataList));
                   // To update screen after check task
                   _loadTask();
                 }

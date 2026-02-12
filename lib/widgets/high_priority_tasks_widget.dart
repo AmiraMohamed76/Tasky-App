@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:tasky_app/core/widgets/custom_check_box.dart';
 import 'package:tasky_app/model/task_model.dart';
 import 'package:tasky_app/screens/high_priority_screen.dart';
 
@@ -20,7 +21,7 @@ class HighPriorityTasksWidget extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Color(0xFF282828),
+        color: Theme.of(context).colorScheme.primaryContainer,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -31,7 +32,7 @@ class HighPriorityTasksWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.only(top: 16, right: 16, left: 16),
                   child: Text(
                     "High Priority Tasks",
                     style: TextStyle(
@@ -45,9 +46,16 @@ class HighPriorityTasksWidget extends StatelessWidget {
                   shrinkWrap: true,
                   physics: NeverScrollableScrollPhysics(),
                   itemCount:
-                      tasks.reversed.where((e) => e.isHighPriority).toList().length > 4
+                      tasks.reversed
+                              .where((e) => e.isHighPriority)
+                              .toList()
+                              .length >
+                          4
                       ? 4
-                      : tasks.reversed.where((e) => e.isHighPriority).toList().length,
+                      : tasks.reversed
+                            .where((e) => e.isHighPriority)
+                            .toList()
+                            .length,
 
                   itemBuilder: (context, index) {
                     final task = tasks.reversed
@@ -55,33 +63,21 @@ class HighPriorityTasksWidget extends StatelessWidget {
                         .toList()[index];
                     return Row(
                       children: [
-                        Checkbox(
+                        CustomCheckBox(
                           value: task.isDone,
-                          onChanged: (bool? value) async {
+                          onChanged: (bool? value) {
                             final index = tasks.indexWhere(
                               (e) => e.id == task.id,
                             );
                             onTap(value, index);
                           },
-                          activeColor: Color(0xFF15B86C),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4),
-                          ),
                         ),
-                        Expanded(
+                        Flexible(
                           child: Text(
                             task.taskName,
-                            style: TextStyle(
-                              color: task.isDone
-                                  ? Color(0xFFA0A0A0)
-                                  : Color(0xFFFFFCFC),
-                              fontSize: 16,
-                              decoration: task.isDone
-                                  ? TextDecoration.lineThrough
-                                  : TextDecoration.none,
-                              decorationColor: Color(0xFFA0A0A0),
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                            style: task.isDone
+                                ? Theme.of(context).textTheme.titleLarge
+                                : Theme.of(context).textTheme.titleMedium,
                             maxLines: 1,
                           ),
                         ),
@@ -89,45 +85,6 @@ class HighPriorityTasksWidget extends StatelessWidget {
                     );
                   },
                 ),
-                // ...tasks.reversed.where((e) => e.isHighPriority).take(4).map((
-                //   element,
-                // ) {
-                //   // ... called spread operator which i can enter list of widgets in column as one widget
-                //   return Row(
-                //     children: [
-                //       Checkbox(
-                //         value: element.isDone,
-                //         onChanged: (bool? value) async {
-                //           final index = tasks.indexWhere(
-                //             (e) => e.id == element.id,
-                //           );
-                //           onTap(value, index);
-                //         },
-                //         activeColor: Color(0xFF15B86C),
-                //         shape: RoundedRectangleBorder(
-                //           borderRadius: BorderRadius.circular(4),
-                //         ),
-                //       ),
-                //       Expanded(
-                //         child: Text(
-                //           element.taskName,
-                //           style: TextStyle(
-                //             color: element.isDone
-                //                 ? Color(0xFFA0A0A0)
-                //                 : Color(0xFFFFFCFC),
-                //             fontSize: 16,
-                //             decoration: element.isDone
-                //                 ? TextDecoration.lineThrough
-                //                 : TextDecoration.none,
-                //             decorationColor: Color(0xFFA0A0A0),
-                //             overflow: TextOverflow.ellipsis,
-                //           ),
-                //           maxLines: 1,
-                //         ),
-                //       ),
-                //     ],
-                //   );
-                // }),
               ],
             ),
           ),
@@ -151,7 +108,7 @@ class HighPriorityTasksWidget extends StatelessWidget {
                 padding: EdgeInsets.all(8),
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color(0xFF282828),
+                  color: Theme.of(context).colorScheme.primaryContainer,
                   border: Border.all(color: Color(0xFF6E6E6E)),
                 ),
                 child: SvgPicture.asset("assets/images/arrow_up_right.svg"),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tasky_app/core/services/preferences_manager.dart';
+import 'package:tasky_app/screens/user_details_screen.dart';
+import 'package:tasky_app/screens/welcome_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -10,19 +12,26 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  String? username;
+  late String username;
+  late String motivationQuote;
   bool isDarkMode = true;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _loadUserName();
+    _loadData();
   }
 
-  void _loadUserName() async {
-    final pref = await SharedPreferences.getInstance();
+  void _loadData() async {
     setState(() {
-      username = pref.getString("username");
+      isLoading = true;
+    });
+    setState(() {
+      username = PreferencesManager().getString("username") ?? "";
+      motivationQuote = PreferencesManager().getString("motivation_quote") ??
+          "One task at a time. One step closer";
+      isLoading = false;
     });
   }
 
@@ -74,23 +83,29 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ],
                 ),
                 SizedBox(height: 6),
-                Text(
-                  "$username",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w400,
-                    color: Color(0xFFFFFCFC),
-                  ),
-                ),
-                SizedBox(height: 4),
-                Text(
-                  "One task at a time. One step closer.",
-                  style: TextStyle(
-                    color: Color(0xFFFFFCFC),
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                  ),
-                ),
+                isLoading
+                    ? CircularProgressIndicator()
+                    : Column(
+                        children: [
+                          Text(
+                            username,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFFFFFCFC),
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            motivationQuote,
+                            style: TextStyle(
+                              color: Color(0xFFFFFCFC),
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
               ],
             ),
           ),
@@ -104,7 +119,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           ListTile(
-            onTap: () {},
+            onTap: () async {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return UserDetailsScreen(
+                      username: username,
+                      motivationQuote: motivationQuote,
+                    );
+                  },
+                ),
+              );
+              if (result != null && result) {
+                _loadData();
+              }
+            },
             title: Text(
               "User Details",
               style: TextStyle(
@@ -142,8 +172,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           Divider(color: Color(0xFF6E6E6E), thickness: 1),
           ListTile(
-            onTap: () {
-              //ToDo: Logout
+            onTap: () async {
+              PreferencesManager().remove("username");
+              PreferencesManager().remove("motivation_quote");
+              PreferencesManager().remove("tasks");
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (BuildContext context) {
+                    return WelcomeScreen();
+                  },
+                ),
+                (Route<dynamic> route) => false,
+              );
             },
             title: Text(
               "Log Out",

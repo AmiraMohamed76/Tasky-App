@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tasky_app/model/task_model.dart';
 
+import '../core/widgets/custom_check_box.dart';
+
 class TaskListWidget extends StatelessWidget {
   const TaskListWidget({super.key, required this.tasks, required this.onTap, this.emptyMessage});
 
@@ -10,7 +12,6 @@ class TaskListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Tasks ${tasks.isEmpty}");
     return  tasks.isEmpty
         ? Center(
       child: Text(
@@ -35,15 +36,11 @@ class TaskListWidget extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 16.0, left: 8),
-                child: Checkbox(
+                child: CustomCheckBox(
                   value: tasks[index].isDone,
-                  onChanged: (bool? value) async {
+                  onChanged: (bool? value) {
                     onTap(value, index);
                   },
-                  activeColor: Color(0xFF15B86C),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(4),
-                  ),
                 ),
               ),
               Expanded(

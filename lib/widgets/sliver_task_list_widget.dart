@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tasky_app/core/widgets/custom_check_box.dart';
 import 'package:tasky_app/model/task_model.dart';
 
 class SliverTaskListWidget extends StatelessWidget {
@@ -15,7 +16,6 @@ class SliverTaskListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Tasks ${tasks.isEmpty}");
     return tasks.isEmpty
         ? SliverToBoxAdapter(
             child: Center(
@@ -35,22 +35,18 @@ class SliverTaskListWidget extends StatelessWidget {
                   width: double.infinity,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    color: Color(0xFF282828),
+                    color: Theme.of(context).colorScheme.primaryContainer,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Row(
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 16.0, left: 8),
-                        child: Checkbox(
+                        child: CustomCheckBox(
                           value: tasks[index].isDone,
-                          onChanged: (bool? value) async {
+                          onChanged: (bool? value) {
                             onTap(value, index);
                           },
-                          activeColor: Color(0xFF15B86C),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(4),
-                          ),
                         ),
                       ),
                       Expanded(

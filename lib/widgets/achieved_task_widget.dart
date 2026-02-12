@@ -19,7 +19,7 @@ class AchievedTaskWidget extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: Color(0xFF282828),
+        color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(20),
       ),
       padding: EdgeInsets.all(16),
@@ -31,19 +31,11 @@ class AchievedTaskWidget extends StatelessWidget {
             children: [
               Text(
                 "Achieved Tasks",
-                style: TextStyle(
-                  color: Color(0xFFFFFCFC),
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: Theme.of(context).textTheme.titleMedium,
               ),
               Text(
                 "$doneTasks Out of $totalTasks Done",
-                style: TextStyle(
-                  color: Color(0xFFC6C6C6),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w400,
-                ),
+                style: Theme.of(context).textTheme.titleSmall,
               ),
             ],
           ),
@@ -66,11 +58,7 @@ class AchievedTaskWidget extends StatelessWidget {
               ),
               Text(
                 "${(precent * 100).toStringAsFixed(0)}%",
-                style: TextStyle(
-                  color: Color(0xFFC6C6C6),
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
+                style: Theme.of(context).textTheme.titleMedium,
               ),
             ],
           ),

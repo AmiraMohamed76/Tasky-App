@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tasky_app/core/services/preferences_manager.dart';
 import 'package:tasky_app/model/task_model.dart';
 import 'package:tasky_app/screens/add_task_screen.dart';
 import 'package:tasky_app/widgets/achieved_task_widget.dart';
@@ -34,9 +34,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _loadUserName() async {
-    final pref = await SharedPreferences.getInstance();
     setState(() {
-      username = pref.getString("username");
+      username = PreferencesManager().getString("username");
     });
   }
 
@@ -45,8 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
       isLoading = true;
     });
 
-    final pref = await SharedPreferences.getInstance();
-    final tasksList = pref.getString("tasks");
+    final tasksList = PreferencesManager().getString("tasks");
 
     if (tasksList != null) {
       final tasksListDecode = jsonDecode(tasksList) as List<dynamic>;
@@ -65,9 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   _calculatePrecent() {
     totalTasks = tasks.length;
-    doneTasks = tasks
-        .where((e) => e.isDone)
-        .length;
+    doneTasks = tasks.where((e) => e.isDone).length;
 
     precent = totalTasks == 0 ? 0 : (doneTasks / totalTasks);
   }
@@ -78,14 +74,11 @@ class _HomeScreenState extends State<HomeScreen> {
       _calculatePrecent();
     });
 
-    // to save isDone in sharedPref
-    final pref = await SharedPreferences.getInstance();
-
     /// dealing with the full list so when change isDone State will change in fullList
     /// on the contrary in todoScreen and completeScreen i need to know the actual index from fullList
     /// and index in the screenList and match them to update correct item
     final updatedTasksList = tasks.map((element) => element.toJson()).toList();
-    await pref.setString("tasks", jsonEncode(updatedTasksList));
+    await PreferencesManager().setString("tasks", jsonEncode(updatedTasksList));
   }
 
   @override
@@ -110,19 +103,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Text(
                             "Good Evening ,$username",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 16,
-                              color: Color(0xFFFFFCFC),
-                            ),
+                            style: Theme.of(context).textTheme.titleMedium,
                           ),
                           Text(
                             "One task at a time.One step closer.",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                              color: Color(0xFFC6C6C6),
-                            ),
+                            style: Theme.of(context).textTheme.titleSmall,
                           ),
                         ],
                       ),
@@ -131,21 +116,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(height: 16),
                   Text(
                     "Yuhuu ,Your work Is",
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xFFFFFCFC),
-                    ),
+                    style: Theme.of(context).textTheme.displayLarge,
                   ),
                   Row(
                     children: [
                       Text(
                         "almost done ! ",
-                        style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.w400,
-                          color: Color(0xFFFFFCFC),
-                        ),
+                        style: Theme.of(context).textTheme.displayLarge,
                       ),
                       SvgPicture.asset("assets/images/waving_hand.svg"),
                     ],
@@ -169,27 +146,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.only(top: 24, bottom: 16),
                     child: Text(
                       "My Tasks",
-                      style: TextStyle(color: Color(0xFFFFFCFC), fontSize: 20),
+                      style: Theme.of(context).textTheme.labelLarge,
                     ),
                   ),
-
-                  isLoading
-                      ? SliverToBoxAdapter(
+                ],
+              ),
+            ),
+            isLoading
+                ? SliverToBoxAdapter(
                     child: Center(
                       child: CircularProgressIndicator(
                         color: Color(0xFFFFFCFC),
                       ),
                     ),
                   )
-                      : SliverTaskListWidget(
+                : SliverTaskListWidget(
                     tasks: tasks,
                     onTap: (bool? value, int? index) {
                       _doneTask(value, index);
                     },
                   ),
-                ],
-              ),
-            )
           ],
         ),
       ),
@@ -211,7 +187,9 @@ class _HomeScreenState extends State<HomeScreen> {
           },
           backgroundColor: Color(0xFF15B86C),
           foregroundColor: Color(0xFFFFFCFC),
-          label: Text("Add New Task"),
+          label: Text("Add New Task", style: TextStyle(
+            fontSize: 14
+          ),),
           icon: Icon(Icons.add),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(100),

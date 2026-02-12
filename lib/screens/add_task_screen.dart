@@ -1,7 +1,7 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tasky_app/core/services/preferences_manager.dart';
+import 'package:tasky_app/core/widgets/custom_text_form_field.dart';
 import 'package:tasky_app/model/task_model.dart';
 
 class AddTaskScreen extends StatefulWidget {
@@ -25,10 +25,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-
-        title: Text("New Task"),
-      ),
+      appBar: AppBar(title: Text("New Task")),
       body: SafeArea(
         child: Form(
           key: _key,
@@ -42,62 +39,23 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Task Name",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFFFFFCFC),
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        TextFormField(
+                        CustomTextFormField(
                           controller: taskNameController,
+                          hintText: 'Please Enter Task Name',
                           validator: (String? value) {
                             if (value == null || value.trim().isEmpty) {
                               return "Please Enter Task Name";
                             }
                             return null;
                           },
-                          style: TextStyle(color: Colors.white),
-                          decoration: InputDecoration(
-                            hintText: 'Finish UI design for login screen',
-                            hintStyle: TextStyle(color: Color(0xFF6D6D6D)),
-                            filled: true,
-                            fillColor: Color(0xFF282828),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
-                          cursorColor: Colors.white,
+                          title: "Task Name",
                         ),
                         SizedBox(height: 20),
-                        Text(
-                          "Task Description",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            color: Color(0xFFFFFCFC),
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        TextFormField(
+                        CustomTextFormField(
                           controller: taskDescriptionController,
-                          style: TextStyle(color: Colors.white),
-                          decoration: InputDecoration(
-                            hintText:
-                                'Finish onboarding UI and hand off to devs by Thursday.',
-                            hintStyle: TextStyle(color: Color(0xFF6D6D6D)),
-                            filled: true,
-                            fillColor: Color(0xFF282828),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
-                              borderSide: BorderSide.none,
-                            ),
-                          ),
+                          hintText: 'Finish onboarding UI and hand off to devs by Thursday.',
                           maxLines: 5,
-                          cursorColor: Colors.white,
+                          title: "Task Description",
                         ),
                         SizedBox(height: 20),
                         Row(
@@ -128,12 +86,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                 ElevatedButton.icon(
                   onPressed: () async {
                     if (_key.currentState?.validate() ?? false) {
-
-                      // save data (SharedPreference)
-                      final pref = await SharedPreferences.getInstance();
-
                       // check by key {tasks} -> String?
-                      final taskJson = pref.getString("tasks");
+                      final taskJson = PreferencesManager().getString("tasks");
 
                       List<dynamic> tasksList = []; // List<Map<String, dynamic>>
 
@@ -144,7 +98,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
                       // to create TaskModel to save in sharedPreference
                       final task = TaskModel(
-                        id: tasksList.length +1,
+                        id: tasksList.length + 1,
                         taskName: taskNameController.text,
                         taskDescription: taskDescriptionController.text,
                         isHighPriority: isHighPriority,
@@ -155,15 +109,13 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
                       // covert this list to string to save it in SharedPreference
                       final tasksListEncode = jsonEncode(tasksList);
-                      await pref.setString("tasks", tasksListEncode);
+                      await PreferencesManager().setString("tasks", tasksListEncode);
 
                       // navigation with result (true) value to check on this result on HomeScreen to check if add task will loadTasks again to update list
                       Navigator.of(context).pop(true);
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFF15B86C),
-                    foregroundColor: Color(0xFFFFFCFC),
                     fixedSize: Size(MediaQuery.of(context).size.width, 40),
                   ),
                   label: Text("Add Task"),

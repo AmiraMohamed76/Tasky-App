@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
+import '../core/services/preferences_manager.dart';
 import '../model/task_model.dart';
 import '../widgets/task_list_widget.dart';
 
@@ -28,9 +27,7 @@ class _HighPriorityScreenState extends State<HighPriorityScreen> {
       isLoading = true;
     });
 
-    final pref = await SharedPreferences.getInstance();
-    final tasksList = pref.getString("tasks");
-
+    final tasksList = PreferencesManager().getString("tasks");
     if (tasksList != null) {
       final tasksListDecode = jsonDecode(tasksList) as List<dynamic>;
       setState(() {
@@ -65,8 +62,7 @@ class _HighPriorityScreenState extends State<HighPriorityScreen> {
             });
 
             // to save isDone in sharedPref
-            final pref = await SharedPreferences.getInstance();
-            final allData = pref.getString("tasks");
+            final allData = PreferencesManager().getString("tasks");
             // to update changed item not change all list
             if (allData != null) {
               List<TaskModel> allDataList = (jsonDecode(allData) as List)
@@ -75,7 +71,7 @@ class _HighPriorityScreenState extends State<HighPriorityScreen> {
               final newIndex = allDataList.indexWhere((e) =>
               e.id == highPriorityTasks[index!].id);
               allDataList[newIndex] = highPriorityTasks[index!];
-              await pref.setString("tasks", jsonEncode(allDataList));
+              await PreferencesManager().setString("tasks", jsonEncode(allDataList));
               // To update screen after check task
               _loadTask();
             }

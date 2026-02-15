@@ -51,42 +51,50 @@ class _CompleteTasksScreenState extends State<CompleteTasksScreen> {
         Center(
           child: Padding(
             padding: const EdgeInsets.all(18.0),
-            child: Text("Completed Tasks",
-              style: TextStyle(
-                  color: Color(0xFF161F1B),
-                  fontSize: 20
-              ),),
+            child: Text(
+              "Completed Tasks",
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
           ),
         ),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: isLoading
-                ? Center(child: CircularProgressIndicator(color: Color(0xFFFFFCFC)))
+                ? Center(
+                    child: CircularProgressIndicator(color: Color(0xFFFFFCFC)),
+                  )
                 : TaskListWidget(
-              tasks: completedTasks,
-              onTap: (bool? value, int? index) async {
-                setState(() {
-                  completedTasks[index!].isDone = value ?? false;
-                });
-                final allData = PreferencesManager().getString("tasks");
+                    tasks: completedTasks,
+                    onTap: (bool? value, int? index) async {
+                      setState(() {
+                        completedTasks[index!].isDone = value ?? false;
+                      });
+                      final allData = PreferencesManager().getString("tasks");
 
-                if(allData != null){
-                  final allDataList = (jsonDecode(allData) as List).map((element) => TaskModel.fromJson(element)).toList();
-                  /// newIndex -> item index in fullList, index -> same item index but in completedList to update item in fullList
-                  final newIndex = allDataList.indexWhere((e) => e.id == completedTasks[index!].id);
-                  allDataList[newIndex] = completedTasks[index!];
-                  await PreferencesManager().setString("tasks", jsonEncode(allDataList));
+                      if (allData != null) {
+                        final allDataList = (jsonDecode(allData) as List)
+                            .map((element) => TaskModel.fromJson(element))
+                            .toList();
 
-                  // To update screen after check task
-                  _loadTask();
-                }
-              },
-              emptyMessage: "No Tasks Found",
-            ),
+                        /// newIndex -> item index in fullList, index -> same item index but in completedList to update item in fullList
+                        final newIndex = allDataList.indexWhere(
+                          (e) => e.id == completedTasks[index!].id,
+                        );
+                        allDataList[newIndex] = completedTasks[index!];
+                        await PreferencesManager().setString(
+                          "tasks",
+                          jsonEncode(allDataList),
+                        );
+
+                        // To update screen after check task
+                        _loadTask();
+                      }
+                    },
+                    emptyMessage: "No Tasks Found",
+                  ),
           ),
-        )
-
+        ),
       ],
     );
   }

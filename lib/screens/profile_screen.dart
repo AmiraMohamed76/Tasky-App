@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tasky_app/core/services/preferences_manager.dart';
+import 'package:tasky_app/core/services/theme_controller.dart';
+import 'package:tasky_app/core/widgets/custom_svg_picture.dart';
 import 'package:tasky_app/screens/user_details_screen.dart';
 import 'package:tasky_app/screens/welcome_screen.dart';
 
@@ -14,7 +15,6 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late String username;
   late String motivationQuote;
-  bool isDarkMode = true;
   bool isLoading = false;
 
   @override
@@ -29,7 +29,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
     setState(() {
       username = PreferencesManager().getString("username") ?? "";
-      motivationQuote = PreferencesManager().getString("motivation_quote") ??
+      motivationQuote =
+          PreferencesManager().getString("motivation_quote") ??
           "One task at a time. One step closer";
       isLoading = false;
     });
@@ -46,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: const EdgeInsets.only(top: 8.0),
             child: Text(
               "My Profile",
-              style: TextStyle(color: Color(0xFFFFFCFC), fontSize: 20),
+              style: Theme.of(context).textTheme.labelSmall,
             ),
           ),
           SizedBox(height: 16),
@@ -68,14 +69,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         height: 36,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(100),
-                          color: Color(0xFF282828),
+                          color: Theme.of(context).colorScheme.primaryContainer,
+                          border: Border.all(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ),
-
                         child: Center(
-                          child: SvgPicture.asset(
-                            "assets/images/camera.svg",
-                            width: 20,
-                            height: 20,
+                          child: CustomSvgPicture(
+                            imagePath: "assets/images/camera.svg",
                           ),
                         ),
                       ),
@@ -89,20 +90,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           Text(
                             username,
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w400,
-                              color: Color(0xFFFFFCFC),
-                            ),
+                            style: Theme.of(context).textTheme.labelSmall,
                           ),
                           SizedBox(height: 4),
                           Text(
                             motivationQuote,
-                            style: TextStyle(
-                              color: Color(0xFFFFFCFC),
-                              fontWeight: FontWeight.w400,
-                              fontSize: 14,
-                            ),
+                            style: Theme.of(context).textTheme.titleSmall,
                           ),
                         ],
                       ),
@@ -110,14 +103,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           SizedBox(height: 24),
-          Text(
-            "Profile Info",
-            style: TextStyle(
-              color: Color(0xFFFFFCFC),
-              fontSize: 20,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
+          Text("Profile Info", style: Theme.of(context).textTheme.labelSmall),
           ListTile(
             onTap: () async {
               final result = await Navigator.push(
@@ -135,42 +121,30 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _loadData();
               }
             },
-            title: Text(
-              "User Details",
-              style: TextStyle(
-                color: Color(0xFFFFFCFC),
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            leading: SvgPicture.asset("assets/images/profile.svg"),
-            trailing: SvgPicture.asset("assets/images/arrow.svg"),
+            title: Text("User Details"),
+            leading: CustomSvgPicture(imagePath: "assets/images/profile.svg"),
+            trailing: CustomSvgPicture(imagePath: "assets/images/arrow.svg"),
             contentPadding: EdgeInsets.zero,
           ),
-          Divider(color: Color(0xFF6E6E6E), thickness: 1),
+          Divider(),
           ListTile(
-            title: Text(
-              "Dark Mode",
-              style: TextStyle(
-                color: Color(0xFFFFFCFC),
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            leading: SvgPicture.asset("assets/images/dark.svg"),
-            trailing: Switch(
-              // activeTrackColor: Color(0xFF15B86C),
-              value: isDarkMode,
-              onChanged: (bool value) {
-                // ToDo: Change Dark theme
-                setState(() {
-                  isDarkMode = value;
-                });
+            title: Text("Dark Mode"),
+            leading: CustomSvgPicture(imagePath: "assets/images/dark.svg"),
+            trailing: ValueListenableBuilder<ThemeMode>(
+              valueListenable: ThemeController.themeNotifier,
+              builder: (BuildContext context, value, Widget? child) {
+                return Switch(
+                  value: value == ThemeMode.dark,
+                  // check if theme is dark (true) or light (false)
+                  onChanged: (bool value) async {
+                    ThemeController.toggleTheme();
+                  },
+                );
               },
             ),
             contentPadding: EdgeInsets.zero,
           ),
-          Divider(color: Color(0xFF6E6E6E), thickness: 1),
+          Divider(),
           ListTile(
             onTap: () async {
               PreferencesManager().remove("username");
@@ -186,16 +160,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 (Route<dynamic> route) => false,
               );
             },
-            title: Text(
-              "Log Out",
-              style: TextStyle(
-                color: Color(0xFFFFFCFC),
-                fontSize: 16,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            leading: SvgPicture.asset("assets/images/log_out.svg"),
-            trailing: SvgPicture.asset("assets/images/arrow.svg"),
+            title: Text("Log Out"),
+            leading: CustomSvgPicture(imagePath: "assets/images/log_out.svg"),
+            trailing: CustomSvgPicture(imagePath: "assets/images/arrow.svg"),
             contentPadding: EdgeInsets.zero,
           ),
         ],

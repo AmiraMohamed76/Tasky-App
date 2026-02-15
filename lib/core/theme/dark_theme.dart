@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 ThemeData darkTheme = ThemeData(
   useMaterial3: true,
   brightness: Brightness.dark,
-  colorScheme: ColorScheme.light(primaryContainer: Color(0xFF282828)),
+  colorScheme: ColorScheme.dark(
+    primaryContainer: Color(0xFF282828),
+    primary: Colors.transparent,
+    onPrimary: Color(0xFF6E6E6E),
+    secondary: Color(0xFFC6C6C6),
+  ),
   scaffoldBackgroundColor: Color(0xFF181818),
   appBarTheme: AppBarTheme(
     backgroundColor: Color(0xFF181818),
@@ -45,7 +50,15 @@ ThemeData darkTheme = ThemeData(
     style: ButtonStyle(
       foregroundColor: WidgetStateProperty.all(Color(0xFFFFFCFC)),
       backgroundColor: WidgetStateProperty.all(Color(0xFF15B86C)),
+      textStyle: WidgetStateProperty.all(
+        TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+      ),
     ),
+  ),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: Color(0xFF15B86C),
+    foregroundColor: Color(0xFFFFFCFC),
+    extendedTextStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
   ),
   textTheme: TextTheme(
     displaySmall: TextStyle(
@@ -63,8 +76,13 @@ ThemeData darkTheme = ThemeData(
       fontWeight: FontWeight.w400,
       color: Color(0xFFFFFCFC),
     ),
+    labelSmall: TextStyle(
+      color: Color(0xFFC6C6C6),
+      fontSize: 20,
+      fontWeight: FontWeight.w400,
+    ),
+    labelLarge: TextStyle(color: Colors.white, fontSize: 24),
     labelMedium: TextStyle(color: Colors.white),
-    labelLarge: TextStyle(color: Color(0xFFFFFCFC), fontSize: 20),
     titleSmall: TextStyle(
       fontWeight: FontWeight.w400,
       fontSize: 14,
@@ -102,4 +120,13 @@ ThemeData darkTheme = ThemeData(
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
     side: BorderSide(color: Color(0xFF6E6E6E), width: 2),
   ),
+  iconTheme: IconThemeData(color: Color(0xFFFFFCFC)),
+  dividerTheme: DividerThemeData(color: Color(0xFF6E6E6E), thickness: 1),
+  listTileTheme: ListTileThemeData(
+    titleTextStyle:  TextStyle(
+      color: Color(0xFFC6C6C6),
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+    ),
+  )
 );

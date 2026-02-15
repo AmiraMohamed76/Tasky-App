@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 ThemeData lightTheme = ThemeData(
   useMaterial3: true,
   brightness: Brightness.light,
-  colorScheme: ColorScheme.light(primaryContainer: Color(0xFFFFFFFF)),
+  colorScheme: ColorScheme.light(
+    primaryContainer: Color(0xFFFFFFFF),
+    primary: Color(0xFFD1DAD6),
+    onPrimary: Color(0xFFD1DAD6),
+    secondary: Color(0xFF161F1B),
+  ),
   scaffoldBackgroundColor: Color(0xFFF6F7F9),
   appBarTheme: AppBarTheme(
     backgroundColor: Color(0xFFFFFFFF),
@@ -45,7 +50,15 @@ ThemeData lightTheme = ThemeData(
     style: ButtonStyle(
       foregroundColor: WidgetStateProperty.all(Color(0xFFFFFCFC)),
       backgroundColor: WidgetStateProperty.all(Color(0xFF15B86C)),
+      textStyle: WidgetStateProperty.all(
+        TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+      ),
     ),
+  ),
+  floatingActionButtonTheme: FloatingActionButtonThemeData(
+    backgroundColor: Color(0xFF15B86C),
+    foregroundColor: Color(0xFFFFFCFC),
+    extendedTextStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
   ),
   textTheme: TextTheme(
     displaySmall: TextStyle(
@@ -63,8 +76,13 @@ ThemeData lightTheme = ThemeData(
       fontWeight: FontWeight.w400,
       color: Color(0xFF161F1B),
     ),
+    labelSmall: TextStyle(
+      color: Color(0xFF161F1B),
+      fontSize: 20,
+      fontWeight: FontWeight.w400,
+    ),
+    labelLarge: TextStyle(color: Colors.black, fontSize: 24),
     labelMedium: TextStyle(color: Colors.black),
-    labelLarge: TextStyle(color: Color(0xFF161F1B), fontSize: 20),
     titleSmall: TextStyle(
       fontWeight: FontWeight.w400,
       fontSize: 14,
@@ -107,12 +125,16 @@ ThemeData lightTheme = ThemeData(
     ),
   ),
   checkboxTheme: CheckboxThemeData(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(4),
-    ),
-    side: BorderSide(
-      color: Color(0xFFD1DAD6),
-      width: 2,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+    side: BorderSide(color: Color(0xFFD1DAD6), width: 2),
+  ),
+  iconTheme: IconThemeData(color: Color(0xFF3A4640)),
+  dividerTheme: DividerThemeData(color: Color(0xFFD1DAD6), thickness: 1),
+  listTileTheme: ListTileThemeData(
+    titleTextStyle: TextStyle(
+      color: Color(0xFF161F1B),
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
     ),
   ),
 );

@@ -63,10 +63,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                           children: [
                             Text(
                               "High Priority",
-                              style: TextStyle(
-                                color: Color(0xFFFFFCFC),
-                                fontSize: 16,
-                              ),
+                              style: Theme.of(context).textTheme.titleMedium
                             ),
                             Switch(
                               value: isHighPriority,
@@ -118,7 +115,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   style: ElevatedButton.styleFrom(
                     fixedSize: Size(MediaQuery.of(context).size.width, 40),
                   ),
-                  label: Text("Add Task"),
+                  label: Text("Add Task",),
                   icon: Icon(Icons.add),
                 ),
               ],

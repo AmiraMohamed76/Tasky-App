@@ -9,7 +9,7 @@ class CustomCheckBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Checkbox(
       value: value,
-      onChanged:(bool? value) => onChanged(value) ,
+      onChanged:(bool? value) => onChanged(value),
       activeColor: Color(0xFF15B86C),
     );
   }

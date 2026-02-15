@@ -64,7 +64,7 @@ class PreferencesManager {
     await _preferences.remove(key);
   }
 
-  clear(String key) async {
+  clear() async {
     await _preferences.clear();
   }
 }

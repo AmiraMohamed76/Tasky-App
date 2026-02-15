@@ -146,7 +146,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     padding: const EdgeInsets.only(top: 24, bottom: 16),
                     child: Text(
                       "My Tasks",
-                      style: Theme.of(context).textTheme.labelLarge,
+                      style: Theme.of(context).textTheme.labelSmall,
                     ),
                   ),
                 ],
@@ -185,11 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
               _loadTasks();
             }
           },
-          backgroundColor: Color(0xFF15B86C),
-          foregroundColor: Color(0xFFFFFCFC),
-          label: Text("Add New Task", style: TextStyle(
-            fontSize: 14
-          ),),
+          label: Text("Add New Task"),
           icon: Icon(Icons.add),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(100),

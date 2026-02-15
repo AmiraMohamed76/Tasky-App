@@ -12,10 +12,7 @@ class CustomButton extends StatelessWidget {
       style: ElevatedButton.styleFrom(
         fixedSize: Size(MediaQuery.of(context).size.width, 40),
       ),
-      child: Text(
-        btnTitle,
-        style: TextStyle(fontWeight: FontWeight.w500),
-      ),
+      child: Text(btnTitle),
     );
   }
 }

@@ -27,10 +27,10 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
     return Scaffold(
       appBar: AppBar(title: Text("New Task")),
       body: SafeArea(
-        child: Form(
-          key: _key,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
+          child: Form(
+            key: _key,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

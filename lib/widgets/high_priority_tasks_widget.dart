@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tasky_app/core/widgets/custom_check_box.dart';
 import 'package:tasky_app/core/widgets/custom_svg_picture.dart';
 import 'package:tasky_app/model/task_model.dart';
@@ -38,7 +37,9 @@ class HighPriorityTasksWidget extends StatelessWidget {
             padding: const EdgeInsets.only(top: 16, right: 16, left: 16),
             child: Text(
               "High Priority Tasks",
-              style: Theme.of(context).textTheme.titleSmall,
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  color: Theme.of(context).colorScheme.onSecondary,
+              ),
             ),
           ),
           Row(
@@ -122,7 +123,11 @@ class HighPriorityTasksWidget extends StatelessWidget {
                         color: Theme.of(context).colorScheme.onPrimary,
                       ),
                     ),
-                    child: CustomSvgPicture(imagePath: "assets/images/arrow_up_right.svg"),
+                    child: CustomSvgPicture(
+                      imagePath: "assets/images/arrow_up_right.svg",
+                      height: 24,
+                      width: 24,
+                    ),
                   ),
                 ),
               ),

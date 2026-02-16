@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:tasky_app/core/services/preferences_manager.dart';
 import 'package:tasky_app/core/services/theme_controller.dart';
 import 'package:tasky_app/core/widgets/custom_svg_picture.dart';
@@ -15,6 +19,7 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   late String username;
   late String motivationQuote;
+  String? userImagePath;
   bool isLoading = false;
 
   @override
@@ -29,10 +34,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
     setState(() {
       username = PreferencesManager().getString("username") ?? "";
-      motivationQuote =
-          PreferencesManager().getString("motivation_quote") ??
-          "One task at a time. One step closer";
+      motivationQuote = PreferencesManager().getString("motivation_quote") ?? "One task at a time. One step closer";
+      userImagePath = PreferencesManager().getString("user_image");
       isLoading = false;
+
     });
   }
 
@@ -43,11 +48,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Text(
-              "My Profile",
-              style: Theme.of(context).textTheme.labelSmall,
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Text(
+                "My Profile",
+                style: Theme.of(context).textTheme.labelSmall,
+              ),
             ),
           ),
           SizedBox(height: 16),
@@ -57,13 +64,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Stack(
                   alignment: Alignment.bottomRight,
                   children: [
-                    CircleAvatar(
-                      backgroundImage: AssetImage("assets/images/person.png"),
-                      radius: 60,
-                      backgroundColor: Colors.transparent,
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.primary,
+                          width: 1.5,
+                        ),
+                      ),
+                      child: CircleAvatar(
+                        backgroundImage: userImagePath == null
+                            ? AssetImage("assets/images/person.png")
+                            : FileImage(File(userImagePath!)),
+                        radius: 60,
+                        backgroundColor: Colors.transparent,
+                      ),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () async {
+                        showImageSourceDialog(context , (XFile file){
+                          // save file
+                          _saveImage(file);
+                          setState(() {
+                            userImagePath = file.path;
+                          });
+                        });
+                      },
                       child: Container(
                         width: 36,
                         height: 36,
@@ -169,4 +196,63 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
+
+  void _saveImage(XFile file) async {
+    final appDir = await getApplicationDocumentsDirectory();
+    final newFile = await File(file.path).copy('${appDir.path}/${file.path}');
+    PreferencesManager().setString("user_image", newFile.path);
+  }
+}
+
+void showImageSourceDialog(BuildContext context, Function(XFile) selectedFile) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return SimpleDialog(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        title: Text(
+          "Choose Image Source",
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        children: [
+          SimpleDialogOption(
+            onPressed: () async {
+              Navigator.pop(context);
+              XFile? image = await ImagePicker().pickImage(
+                source: ImageSource.camera,
+              );
+              if (image != null) {
+                selectedFile(image);
+              }
+            },
+            child: Row(
+              children: [
+                CustomSvgPicture(imagePath: "assets/images/camera.svg"),
+                SizedBox(width: 8),
+                Text("Camera", style: Theme.of(context).textTheme.titleMedium),
+              ],
+            ),
+          ),
+          SimpleDialogOption(
+            onPressed: () async {
+              Navigator.pop(context);
+              XFile? image = await ImagePicker().pickImage(
+                source: ImageSource.gallery,
+              );
+              if (image != null) {
+                selectedFile(image);
+              }
+            },
+            child: Row(
+              children: [
+                Icon(Icons.photo_library_outlined),
+                SizedBox(width: 8),
+                Text("Gallery", style: Theme.of(context).textTheme.titleMedium),
+              ],
+            ),
+          ),
+        ],
+      );
+    },
+  );
 }

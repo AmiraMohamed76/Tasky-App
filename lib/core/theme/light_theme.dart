@@ -8,6 +8,9 @@ ThemeData lightTheme = ThemeData(
     primary: Color(0xFFD1DAD6),
     onPrimary: Color(0xFFD1DAD6),
     secondary: Color(0xFF161F1B),
+    onSecondary: Color(0xFF14A662),
+    surface: Color(0xFF3A4640),
+    onSurface: Color(0xFF9E9E9E),
   ),
   scaffoldBackgroundColor: Color(0xFFF6F7F9),
   appBarTheme: AppBarTheme(
@@ -23,7 +26,7 @@ ThemeData lightTheme = ThemeData(
   switchTheme: SwitchThemeData(
     trackColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) {
-        return Color(0xFF15B86C);
+        return Color(0xFF14A662);
       }
       return Colors.white;
     }),
@@ -49,14 +52,19 @@ ThemeData lightTheme = ThemeData(
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
       foregroundColor: WidgetStateProperty.all(Color(0xFFFFFCFC)),
-      backgroundColor: WidgetStateProperty.all(Color(0xFF15B86C)),
+      backgroundColor: WidgetStateProperty.all(Color(0xFF14A662)),
       textStyle: WidgetStateProperty.all(
         TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
       ),
     ),
   ),
+  textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: WidgetStateProperty.all(Colors.black),
+      )
+  ),
   floatingActionButtonTheme: FloatingActionButtonThemeData(
-    backgroundColor: Color(0xFF15B86C),
+    backgroundColor: Color(0xFF14A662),
     foregroundColor: Color(0xFFFFFCFC),
     extendedTextStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
   ),
@@ -135,6 +143,32 @@ ThemeData lightTheme = ThemeData(
       color: Color(0xFF161F1B),
       fontSize: 16,
       fontWeight: FontWeight.w400,
+    ),
+  ),
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: Colors.grey,
+    selectionHandleColor: Colors.grey,
+    selectionColor: Colors.grey,
+  ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: Color(0xFFF6F7F9),
+      type: BottomNavigationBarType.fixed,
+      unselectedItemColor: Color(0xFF3A4640),
+      selectedItemColor: Color(0xFF14A662),
+    ),
+  splashFactory: NoSplash.splashFactory,
+  popupMenuTheme: PopupMenuThemeData(
+    color: Color(0xFFF6F7F9),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    elevation: 2,
+    shadowColor: Colors.grey,
+    menuPadding: EdgeInsets.only(bottom: 0),
+    labelTextStyle: WidgetStateProperty.all(
+      TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+        color: Colors.black,
+      ),
     ),
   ),
 );

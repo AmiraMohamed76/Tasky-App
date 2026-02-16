@@ -8,6 +8,9 @@ ThemeData darkTheme = ThemeData(
     primary: Colors.transparent,
     onPrimary: Color(0xFF6E6E6E),
     secondary: Color(0xFFC6C6C6),
+    surface: Color(0xFFC6C6C6),
+    onSecondary: Color(0xFF15B86C),
+    onSurface: Color(0xFF6D6D6D),
   ),
   scaffoldBackgroundColor: Color(0xFF181818),
   appBarTheme: AppBarTheme(
@@ -54,6 +57,11 @@ ThemeData darkTheme = ThemeData(
         TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
       ),
     ),
+  ),
+  textButtonTheme: TextButtonThemeData(
+    style: ButtonStyle(
+      foregroundColor: WidgetStateProperty.all(Colors.white),
+    )
   ),
   floatingActionButtonTheme: FloatingActionButtonThemeData(
     backgroundColor: Color(0xFF15B86C),
@@ -123,10 +131,36 @@ ThemeData darkTheme = ThemeData(
   iconTheme: IconThemeData(color: Color(0xFFFFFCFC)),
   dividerTheme: DividerThemeData(color: Color(0xFF6E6E6E), thickness: 1),
   listTileTheme: ListTileThemeData(
-    titleTextStyle:  TextStyle(
+    titleTextStyle: TextStyle(
       color: Color(0xFFC6C6C6),
       fontSize: 16,
       fontWeight: FontWeight.w400,
     ),
-  )
+  ),
+  textSelectionTheme: TextSelectionThemeData(
+    cursorColor: Colors.white,
+    selectionHandleColor: Colors.white,
+    selectionColor: Colors.white,
+  ),
+  bottomNavigationBarTheme: BottomNavigationBarThemeData(
+    backgroundColor: Color(0xFF181818),
+    type: BottomNavigationBarType.fixed,
+    unselectedItemColor: Color(0xFFC6C6C6),
+    selectedItemColor: Color(0xFF15B86C),
+  ),
+  splashFactory: NoSplash.splashFactory,
+  popupMenuTheme: PopupMenuThemeData(
+    color: Color(0xFF181818),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    elevation: 2,
+    shadowColor: Colors.grey,
+    menuPadding: EdgeInsets.only(bottom: 0),
+    labelTextStyle: WidgetStateProperty.all(
+      TextStyle(
+        fontSize: 16,
+        fontWeight: FontWeight.w400,
+      ),
+    ),
+  ),
+
 );

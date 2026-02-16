@@ -43,6 +43,46 @@ class _CompleteTasksScreenState extends State<CompleteTasksScreen> {
     });
   }
 
+  void _onTap(bool? value, int? index) async {
+    setState(() {
+      completedTasks[index!].isDone = value ?? false;
+    });
+    final allData = PreferencesManager().getString("tasks");
+
+    if (allData != null) {
+      final allDataList = (jsonDecode(allData) as List)
+          .map((element) => TaskModel.fromJson(element))
+          .toList();
+
+      /// newIndex -> item index in fullList, index -> same item index but in completedList to update item in fullList
+      final newIndex = allDataList.indexWhere(
+        (e) => e.id == completedTasks[index!].id,
+      );
+      allDataList[newIndex] = completedTasks[index!];
+      await PreferencesManager().setString("tasks", jsonEncode(allDataList));
+
+      // To update screen after check task
+      _loadTask();
+    }
+  }
+
+  void _onDelete(int? id) {
+    List<TaskModel> tasks = [];
+    final tasksList = PreferencesManager().getString("tasks");
+    if (tasksList != null) {
+      final tasksListDecode = jsonDecode(tasksList) as List<dynamic>;
+      tasks = tasksListDecode.map((e) => TaskModel.fromJson(e)).toList();
+      tasks.removeWhere((e) => e.id == id);
+
+      setState(() {
+        completedTasks.removeWhere((e) => e.id == id);
+      });
+
+      final updatedTasks = tasks.map((e) => e.toJson()).toList();
+      PreferencesManager().setString("tasks", jsonEncode(updatedTasks));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -66,31 +106,9 @@ class _CompleteTasksScreenState extends State<CompleteTasksScreen> {
                   )
                 : TaskListWidget(
                     tasks: completedTasks,
-                    onTap: (bool? value, int? index) async {
-                      setState(() {
-                        completedTasks[index!].isDone = value ?? false;
-                      });
-                      final allData = PreferencesManager().getString("tasks");
-
-                      if (allData != null) {
-                        final allDataList = (jsonDecode(allData) as List)
-                            .map((element) => TaskModel.fromJson(element))
-                            .toList();
-
-                        /// newIndex -> item index in fullList, index -> same item index but in completedList to update item in fullList
-                        final newIndex = allDataList.indexWhere(
-                          (e) => e.id == completedTasks[index!].id,
-                        );
-                        allDataList[newIndex] = completedTasks[index!];
-                        await PreferencesManager().setString(
-                          "tasks",
-                          jsonEncode(allDataList),
-                        );
-
-                        // To update screen after check task
-                        _loadTask();
-                      }
-                    },
+                    onTap: (bool? value, int? index) => _onTap(value, index),
+                    onDelete: (int? id) => _onDelete(id),
+                    onEdit: () => _loadTask(),
                     emptyMessage: "No Tasks Found",
                   ),
           ),

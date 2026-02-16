@@ -31,54 +31,37 @@ class _MainScreenState extends State<MainScreen> {
             _currentIndex = index ?? 0;
           });
         },
-        type: BottomNavigationBarType.fixed,
-        unselectedItemColor: Color(0xFFC6C6C6),
-        selectedItemColor: Color(0xFF15B86C),
+
         items: [
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/images/home.svg",
-              colorFilter: ColorFilter.mode(
-                _currentIndex == 0 ? Color(0xFF15B86C) : Color(0xFFC6C6C6),
-                BlendMode.srcIn,
-              ),
-            ),
+            icon: _buildSvgPicture("assets/images/home.svg", 0),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/images/todo.svg",
-              colorFilter: ColorFilter.mode(
-                _currentIndex == 1 ? Color(0xFF15B86C) : Color(0xFFC6C6C6),
-                BlendMode.srcIn,
-              ),
-            ),
+            icon: _buildSvgPicture("assets/images/todo.svg", 1),
             label: 'To Do',
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/images/complete.svg",
-              colorFilter: ColorFilter.mode(
-                _currentIndex == 2 ? Color(0xFF15B86C) : Color(0xFFC6C6C6),
-                BlendMode.srcIn,
-              ),
-            ),
+            icon: _buildSvgPicture("assets/images/complete.svg", 2),
             label: 'Completed',
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              "assets/images/profile.svg",
-              colorFilter: ColorFilter.mode(
-                _currentIndex == 3 ? Color(0xFF15B86C) : Color(0xFFC6C6C6),
-                BlendMode.srcIn,
-              ),
-            ),
+            icon: _buildSvgPicture("assets/images/profile.svg", 3),
             label: 'Profile',
           ),
         ],
-        backgroundColor: Color(0xFF181818),
       ),
       body: SafeArea(child: _screen[_currentIndex]),
     );
   }
+
+  SvgPicture _buildSvgPicture(String path, int index) => SvgPicture.asset(
+    path,
+    colorFilter: ColorFilter.mode(
+      _currentIndex == index
+          ? Theme.of(context).colorScheme.onSecondary
+          : Theme.of(context).colorScheme.surface,
+      BlendMode.srcIn,
+    ),
+  );
 }

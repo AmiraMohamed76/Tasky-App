@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tasky_app/core/services/preferences_manager.dart';
+import 'package:tasky_app/core/widgets/custom_svg_picture.dart';
 import 'package:tasky_app/core/widgets/custom_text_form_field.dart';
 import 'package:tasky_app/screens/main_screen.dart';
 
@@ -25,8 +25,8 @@ class WelcomeScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SvgPicture.asset(
-                        "assets/images/logo.svg",
+                      CustomSvgPicture.withoutColor(
+                        imagePath: "assets/images/logo.svg",
                         height: 42,
                         width: 42,
                       ),
@@ -45,7 +45,9 @@ class WelcomeScreen extends StatelessWidget {
                         "Welcome To Tasky ",
                         style: Theme.of(context).textTheme.displaySmall,
                       ),
-                      SvgPicture.asset("assets/images/waving_hand.svg"),
+                      CustomSvgPicture.withoutColor(
+                        imagePath: "assets/images/waving_hand.svg",
+                      ),
                     ],
                   ),
                   SizedBox(height: 8),
@@ -56,11 +58,12 @@ class WelcomeScreen extends StatelessWidget {
                     ).textTheme.displaySmall!.copyWith(fontSize: 16),
                   ),
                   SizedBox(height: 24),
-                  SvgPicture.asset(
-                    "assets/images/welcome.svg",
+                  CustomSvgPicture.withoutColor(
+                    imagePath: "assets/images/welcome.svg",
                     width: 215,
                     height: 200,
                   ),
+
                   SizedBox(height: 24),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -104,9 +107,7 @@ class WelcomeScreen extends StatelessWidget {
                               40,
                             ),
                           ),
-                          child: Text(
-                            "Let’s Get Started",
-                          ),
+                          child: Text("Let’s Get Started"),
                         ),
                       ],
                     ),

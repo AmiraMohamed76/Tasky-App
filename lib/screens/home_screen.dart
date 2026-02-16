@@ -1,8 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:tasky_app/core/services/preferences_manager.dart';
+import 'package:tasky_app/core/widgets/custom_svg_picture.dart';
 import 'package:tasky_app/model/task_model.dart';
 import 'package:tasky_app/screens/add_task_screen.dart';
 import 'package:tasky_app/widgets/achieved_task_widget.dart';
@@ -61,14 +61,14 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  _calculatePrecent() {
+  void _calculatePrecent() {
     totalTasks = tasks.length;
     doneTasks = tasks.where((e) => e.isDone).length;
 
     precent = totalTasks == 0 ? 0 : (doneTasks / totalTasks);
   }
 
-  _doneTask(bool? value, int? index) async {
+  void _doneTask(bool? value, int? index) async {
     setState(() {
       tasks[index!].isDone = value ?? false;
       _calculatePrecent();
@@ -79,6 +79,16 @@ class _HomeScreenState extends State<HomeScreen> {
     /// and index in the screenList and match them to update correct item
     final updatedTasksList = tasks.map((element) => element.toJson()).toList();
     await PreferencesManager().setString("tasks", jsonEncode(updatedTasksList));
+  }
+
+  void _deleteTask(int? id) {
+    setState(() {
+      tasks.removeWhere((task) => task.id == id);
+      _calculatePrecent();
+    });
+
+    final updatedTasks = tasks.map((element) => element.toJson()).toList();
+    PreferencesManager().setString("tasks", jsonEncode(updatedTasks));
   }
 
   @override
@@ -124,7 +134,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         "almost done ! ",
                         style: Theme.of(context).textTheme.displayLarge,
                       ),
-                      SvgPicture.asset("assets/images/waving_hand.svg"),
+                      CustomSvgPicture.withoutColor(
+                        imagePath: "assets/images/waving_hand.svg",
+                      ),
                     ],
                   ),
                   AchievedTaskWidget(
@@ -165,6 +177,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     onTap: (bool? value, int? index) {
                       _doneTask(value, index);
                     },
+                    onDelete: (int? id) {
+                      _deleteTask(id);
+                    },
+                    onEdit: () => _loadTasks(),
                   ),
           ],
         ),

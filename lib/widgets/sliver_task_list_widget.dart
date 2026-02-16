@@ -3,16 +3,21 @@ import 'package:tasky_app/model/task_model.dart';
 import 'package:tasky_app/widgets/task_item_widget.dart';
 
 class SliverTaskListWidget extends StatelessWidget {
+  final List<TaskModel> tasks;
+  final Function(bool?, int?) onTap;
+  final Function(int? id) onDelete;
+  final Function onEdit;
+  final String? emptyMessage;
+
   const SliverTaskListWidget({
     super.key,
     required this.tasks,
     required this.onTap,
+    required this.onDelete,
+    required this.onEdit,
     this.emptyMessage,
   });
 
-  final List<TaskModel> tasks;
-  final Function(bool?, int?) onTap;
-  final String? emptyMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +40,10 @@ class SliverTaskListWidget extends StatelessWidget {
                   onChanged: (bool? value) {
                     onTap(value, index);
                   },
+                  onDelete: (int? id){
+                    onDelete(id);
+                  },
+                  onEdit: () => onEdit(),
                 );
               },
               separatorBuilder: (BuildContext context, int index) {

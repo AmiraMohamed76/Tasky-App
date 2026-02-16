@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../core/services/theme_controller.dart';
+
 class AchievedTaskWidget extends StatelessWidget {
   final int totalTasks;
   final int doneTasks;
@@ -21,6 +23,11 @@ class AchievedTaskWidget extends StatelessWidget {
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(
+          color: ThemeController.isDark()
+              ? Colors.transparent
+              : Color(0xFFD1DAD6),
+        ),
       ),
       padding: EdgeInsets.all(16),
       child: Row(
@@ -50,7 +57,7 @@ class AchievedTaskWidget extends StatelessWidget {
                   height: 48,
                   child: CircularProgressIndicator(
                     value: precent,
-                    backgroundColor: Color(0xFF6D6D6D),
+                    backgroundColor: Theme.of(context).colorScheme.onSurface,
                     valueColor: AlwaysStoppedAnimation(Color(0xFF15B86C)),
                     strokeWidth: 4,
                   ),

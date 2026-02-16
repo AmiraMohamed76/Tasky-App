@@ -29,20 +29,62 @@ class _TasksScreenState extends State<TasksScreen> {
     final finalTasks = PreferencesManager().getString("tasks");
 
     if (finalTasks != null) {
-      final taskAfterDecode = jsonDecode(finalTasks) as List<
-          dynamic>; // to covert string to List<Map<String, dynamic>>
+      final taskAfterDecode = jsonDecode(finalTasks) as List<dynamic>; // to covert string to List<Map<String, dynamic>>
       setState(() {
         todoTasks = taskAfterDecode
-            .map((element) =>
-            TaskModel.fromJson(
-            element)) // convert List<Map<String, dynamic>> to List<Model>
-            .where((element) => !element.isDone) // filter allDataList to get items which has isDone = false
+            .map(
+              (element) => TaskModel.fromJson(element),
+            ) // convert List<Map<String, dynamic>> to List<Model>
+            .where(
+              (element) => !element.isDone,
+            ) // filter allDataList to get items which has isDone = false
             .toList();
       });
     }
     setState(() {
       isLoading = false;
     });
+  }
+
+  void _onTap (bool? value, int? index) async {
+    setState(() {
+      todoTasks[index!].isDone = value ?? false;
+    });
+
+    final allData = PreferencesManager().getString("tasks");
+    // to update changed item not change all list
+    if (allData != null) {
+      List<TaskModel> allDataList =
+      (jsonDecode(allData) as List)
+          .map((element) => TaskModel.fromJson(element))
+          .toList();
+      final newIndex = allDataList.indexWhere(
+            (e) => e.id == todoTasks[index!].id,
+      );
+      allDataList[newIndex] = todoTasks[index!];
+      await PreferencesManager().setString(
+        "tasks",
+        jsonEncode(allDataList),
+      );
+      // To update screen after check task
+      _loadTask();
+    }
+  }
+
+  void _deleteTask(int? id) async {
+    List<TaskModel> tasks = [];
+    final finalTasks = PreferencesManager().getString("tasks");
+    if(finalTasks != null){
+      final taskAfterDecode = jsonDecode(finalTasks) as List<dynamic>;
+      tasks = taskAfterDecode.map((e) => TaskModel.fromJson(e)).toList();
+      tasks.removeWhere((e) => e.id == id);
+
+    setState(() {
+      todoTasks.removeWhere((e) => e.id == id);
+    });
+    final updatedTasks = tasks.map((e) => e.toJson()).toList();
+    await PreferencesManager().setString("tasks", jsonEncode(updatedTasks));
+    }
   }
 
   @override
@@ -53,8 +95,9 @@ class _TasksScreenState extends State<TasksScreen> {
         Center(
           child: Padding(
             padding: const EdgeInsets.all(18.0),
-            child: Text("To Do Tasks",
-              style: Theme.of(context).textTheme.labelSmall
+            child: Text(
+              "To Do Tasks",
+              style: Theme.of(context).textTheme.labelSmall,
             ),
           ),
         ),
@@ -63,31 +106,15 @@ class _TasksScreenState extends State<TasksScreen> {
             padding: const EdgeInsets.all(16.0),
             child: isLoading
                 ? Center(
-                child: CircularProgressIndicator(color: Color(0xFFFFFCFC)))
+                    child: CircularProgressIndicator(color: Color(0xFFFFFCFC)),
+                  )
                 : TaskListWidget(
-              tasks: todoTasks,
-              onTap: (bool? value, int? index) async {
-                setState(() {
-                  todoTasks[index!].isDone = value ?? false;
-                });
-
-                final allData = PreferencesManager().getString("tasks");
-                // to update changed item not change all list
-                if (allData != null) {
-                  List<TaskModel> allDataList = (jsonDecode(allData) as List)
-                      .map((element) => TaskModel.fromJson(element))
-                      .toList();
-                  final newIndex = allDataList.indexWhere((e) =>
-                  e.id == todoTasks[index!].id);
-                  allDataList[newIndex] = todoTasks[index!];
-                  await PreferencesManager().setString("tasks", jsonEncode(allDataList));
-                  // To update screen after check task
-                  _loadTask();
-                }
-
-              },
-              emptyMessage: "No Tasks Found",
-            ),
+                    tasks: todoTasks,
+                    onTap: (bool? value, int? index) => _onTap(value, index),
+                    onDelete: (int? id) => _deleteTask(id),
+                    onEdit: () => _loadTask(),
+                    emptyMessage: "No Tasks Found",
+                  ),
           ),
         ),
       ],

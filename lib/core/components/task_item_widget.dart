@@ -5,6 +5,7 @@ import 'package:tasky_app/core/enums/task_item_actions_enum.dart';
 import 'package:tasky_app/core/services/theme_controller.dart';
 import 'package:tasky_app/model/task_model.dart';
 
+import '../constants/storage_key.dart';
 import '../services/preferences_manager.dart';
 import '../widgets/custom_check_box.dart';
 import '../widgets/custom_text_form_field.dart';
@@ -199,7 +200,7 @@ class TaskItemWidget extends StatelessWidget {
                       onPressed: () async {
                         if (key.currentState?.validate() ?? false) {
                           // check by key {tasks} -> String?
-                            final taskJson = PreferencesManager().getString("tasks");
+                            final taskJson = PreferencesManager().getString(StorageKey.tasks);
 
                             List<dynamic> tasksList = []; // List<Map<String, dynamic>>
 
@@ -227,7 +228,7 @@ class TaskItemWidget extends StatelessWidget {
 
                             // covert this list to string to save it in SharedPreference
                             final tasksListEncode = jsonEncode(tasksList);
-                            await PreferencesManager().setString("tasks", tasksListEncode);
+                            await PreferencesManager().setString(StorageKey.tasks, tasksListEncode);
 
                             Navigator.of(context).pop(true);
                         }

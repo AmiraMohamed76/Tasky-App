@@ -4,6 +4,8 @@ import 'package:tasky_app/core/services/preferences_manager.dart';
 import 'package:tasky_app/core/widgets/custom_text_form_field.dart';
 import 'package:tasky_app/model/task_model.dart';
 
+import '../../core/constants/storage_key.dart';
+
 class AddTaskScreen extends StatefulWidget {
   const AddTaskScreen({super.key});
 
@@ -84,7 +86,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   onPressed: () async {
                     if (_key.currentState?.validate() ?? false) {
                       // check by key {tasks} -> String?
-                      final taskJson = PreferencesManager().getString("tasks");
+                      final taskJson = PreferencesManager().getString(StorageKey.tasks);
 
                       List<dynamic> tasksList = []; // List<Map<String, dynamic>>
 
@@ -106,7 +108,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
 
                       // covert this list to string to save it in SharedPreference
                       final tasksListEncode = jsonEncode(tasksList);
-                      await PreferencesManager().setString("tasks", tasksListEncode);
+                      await PreferencesManager().setString(StorageKey.tasks, tasksListEncode);
 
                       // navigation with result (true) value to check on this result on HomeScreen to check if add task will loadTasks again to update list
                       Navigator.of(context).pop(true);

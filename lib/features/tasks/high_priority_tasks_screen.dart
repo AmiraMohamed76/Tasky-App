@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import '../../core/constants/storage_key.dart';
 import '../../core/services/preferences_manager.dart';
 import '../../model/task_model.dart';
 import '../../core/components/task_list_widget.dart';
@@ -9,7 +10,8 @@ class HighPriorityTasksScreen extends StatefulWidget {
   const HighPriorityTasksScreen({super.key});
 
   @override
-  State<HighPriorityTasksScreen> createState() => _HighPriorityTasksScreenState();
+  State<HighPriorityTasksScreen> createState() =>
+      _HighPriorityTasksScreenState();
 }
 
 class _HighPriorityTasksScreenState extends State<HighPriorityTasksScreen> {
@@ -27,7 +29,7 @@ class _HighPriorityTasksScreenState extends State<HighPriorityTasksScreen> {
       isLoading = true;
     });
 
-    final tasksList = PreferencesManager().getString("tasks");
+    final tasksList = PreferencesManager().getString(StorageKey.tasks);
     if (tasksList != null) {
       final tasksListDecode = jsonDecode(tasksList) as List<dynamic>;
       setState(() {
@@ -51,18 +53,18 @@ class _HighPriorityTasksScreenState extends State<HighPriorityTasksScreen> {
     });
 
     // to save isDone in sharedPref
-    final allData = PreferencesManager().getString("tasks");
+    final allData = PreferencesManager().getString(StorageKey.tasks);
     // to update changed item not change all list
     if (allData != null) {
       List<TaskModel> allDataList = (jsonDecode(allData) as List)
           .map((element) => TaskModel.fromJson(element))
           .toList();
       final newIndex = allDataList.indexWhere(
-            (e) => e.id == highPriorityTasks[index!].id,
+        (e) => e.id == highPriorityTasks[index!].id,
       );
       allDataList[newIndex] = highPriorityTasks[index!];
       await PreferencesManager().setString(
-        "tasks",
+        StorageKey.tasks,
         jsonEncode(allDataList),
       );
       // To update screen after check task
@@ -72,8 +74,8 @@ class _HighPriorityTasksScreenState extends State<HighPriorityTasksScreen> {
 
   void _onDelete(int? id) {
     List<TaskModel> tasks = [];
-    final tasksList = PreferencesManager().getString("tasks");
-    if(tasksList != null) {
+    final tasksList = PreferencesManager().getString(StorageKey.tasks);
+    if (tasksList != null) {
       final tasksListDecode = jsonDecode(tasksList) as List<dynamic>;
       tasks = tasksListDecode.map((e) => TaskModel.fromJson(e)).toList();
       tasks.removeWhere((e) => e.id == id);
@@ -83,7 +85,7 @@ class _HighPriorityTasksScreenState extends State<HighPriorityTasksScreen> {
       });
 
       final updatedTasks = tasks.map((e) => e.toJson()).toList();
-      PreferencesManager().setString("tasks", jsonEncode(updatedTasks));
+      PreferencesManager().setString(StorageKey.tasks, jsonEncode(updatedTasks));
     }
   }
 

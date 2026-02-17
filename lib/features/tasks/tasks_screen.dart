@@ -4,6 +4,8 @@ import 'package:tasky_app/core/services/preferences_manager.dart';
 import 'package:tasky_app/model/task_model.dart';
 import 'package:tasky_app/core/components/task_list_widget.dart';
 
+import '../../core/constants/storage_key.dart';
+
 class TasksScreen extends StatefulWidget {
   const TasksScreen({super.key});
 
@@ -26,7 +28,7 @@ class _TasksScreenState extends State<TasksScreen> {
     setState(() {
       isLoading = true;
     });
-    final finalTasks = PreferencesManager().getString("tasks");
+    final finalTasks = PreferencesManager().getString(StorageKey.tasks);
 
     if (finalTasks != null) {
       final taskAfterDecode = jsonDecode(finalTasks) as List<dynamic>; // to covert string to List<Map<String, dynamic>>
@@ -51,7 +53,7 @@ class _TasksScreenState extends State<TasksScreen> {
       todoTasks[index!].isDone = value ?? false;
     });
 
-    final allData = PreferencesManager().getString("tasks");
+    final allData = PreferencesManager().getString(StorageKey.tasks);
     // to update changed item not change all list
     if (allData != null) {
       List<TaskModel> allDataList =
@@ -63,7 +65,7 @@ class _TasksScreenState extends State<TasksScreen> {
       );
       allDataList[newIndex] = todoTasks[index!];
       await PreferencesManager().setString(
-        "tasks",
+        StorageKey.tasks,
         jsonEncode(allDataList),
       );
       // To update screen after check task
@@ -73,7 +75,7 @@ class _TasksScreenState extends State<TasksScreen> {
 
   void _deleteTask(int? id) async {
     List<TaskModel> tasks = [];
-    final finalTasks = PreferencesManager().getString("tasks");
+    final finalTasks = PreferencesManager().getString(StorageKey.tasks);
     if(finalTasks != null){
       final taskAfterDecode = jsonDecode(finalTasks) as List<dynamic>;
       tasks = taskAfterDecode.map((e) => TaskModel.fromJson(e)).toList();
@@ -83,7 +85,7 @@ class _TasksScreenState extends State<TasksScreen> {
       todoTasks.removeWhere((e) => e.id == id);
     });
     final updatedTasks = tasks.map((e) => e.toJson()).toList();
-    await PreferencesManager().setString("tasks", jsonEncode(updatedTasks));
+    await PreferencesManager().setString(StorageKey.tasks, jsonEncode(updatedTasks));
     }
   }
 

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:tasky_app/core/widgets/custom_check_box.dart';
 import 'package:tasky_app/core/widgets/custom_svg_picture.dart';
 import 'package:tasky_app/model/task_model.dart';
-import 'package:tasky_app/screens/high_priority_screen.dart';
+import 'package:tasky_app/features/tasks/high_priority_tasks_screen.dart';
 
-import '../core/services/theme_controller.dart';
+import '../../../core/services/theme_controller.dart';
 
 class HighPriorityTasksWidget extends StatelessWidget {
   final List<TaskModel> tasks;
@@ -104,7 +104,7 @@ class HighPriorityTasksWidget extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) {
-                        return HighPriorityScreen();
+                        return HighPriorityTasksScreen();
                       },
                     ),
                   );

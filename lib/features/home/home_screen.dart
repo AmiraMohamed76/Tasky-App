@@ -1,13 +1,14 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:tasky_app/core/services/preferences_manager.dart';
 import 'package:tasky_app/core/widgets/custom_svg_picture.dart';
 import 'package:tasky_app/model/task_model.dart';
-import 'package:tasky_app/screens/add_task_screen.dart';
-import 'package:tasky_app/widgets/achieved_task_widget.dart';
-import 'package:tasky_app/widgets/high_priority_tasks_widget.dart';
-import 'package:tasky_app/widgets/sliver_task_list_widget.dart';
+import 'package:tasky_app/features/add_task/add_task_screen.dart';
+import 'package:tasky_app/features/home/components/achieved_task_widget.dart';
+import 'package:tasky_app/features/home/components/high_priority_tasks_widget.dart';
+import 'package:tasky_app/features/home/components/sliver_task_list_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String? username;
+  String? userImagePath;
   List<TaskModel> tasks = [];
   bool isChecked = false;
   bool isLoading = false;
@@ -36,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
   void _loadUserName() async {
     setState(() {
       username = PreferencesManager().getString("username");
+      userImagePath = PreferencesManager().getString("user_image");
     });
   }
 
@@ -106,7 +109,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     spacing: 8,
                     children: [
                       CircleAvatar(
-                        backgroundImage: AssetImage("assets/images/person.png"),
+                        backgroundImage: userImagePath == null
+                            ? AssetImage("assets/images/person.png")
+                            : FileImage(File(userImagePath!)),
                       ),
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,

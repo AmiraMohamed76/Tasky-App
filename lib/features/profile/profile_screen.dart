@@ -6,8 +6,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:tasky_app/core/services/preferences_manager.dart';
 import 'package:tasky_app/core/services/theme_controller.dart';
 import 'package:tasky_app/core/widgets/custom_svg_picture.dart';
-import 'package:tasky_app/screens/user_details_screen.dart';
-import 'package:tasky_app/screens/welcome_screen.dart';
+import 'package:tasky_app/features/profile/user_details_screen.dart';
+import 'package:tasky_app/features/welcome/welcome_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -199,7 +199,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _saveImage(XFile file) async {
     final appDir = await getApplicationDocumentsDirectory();
-    final newFile = await File(file.path).copy('${appDir.path}/${file.path}');
+    final newFile = await File(file.path).copy('${appDir.path}/${file.name}');
     PreferencesManager().setString("user_image", newFile.path);
   }
 }
@@ -233,6 +233,7 @@ void showImageSourceDialog(BuildContext context, Function(XFile) selectedFile) {
               ],
             ),
           ),
+          SizedBox(height: 10),
           SimpleDialogOption(
             onPressed: () async {
               Navigator.pop(context);

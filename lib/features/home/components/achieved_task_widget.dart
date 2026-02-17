@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../core/services/theme_controller.dart';
+import '../../../core/services/theme_controller.dart';
 
 class AchievedTaskWidget extends StatelessWidget {
   final int totalTasks;

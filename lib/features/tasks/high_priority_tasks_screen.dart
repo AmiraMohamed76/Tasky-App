@@ -1,18 +1,18 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import '../core/services/preferences_manager.dart';
-import '../model/task_model.dart';
-import '../widgets/task_list_widget.dart';
+import '../../core/services/preferences_manager.dart';
+import '../../model/task_model.dart';
+import '../../core/components/task_list_widget.dart';
 
-class HighPriorityScreen extends StatefulWidget {
-  const HighPriorityScreen({super.key});
+class HighPriorityTasksScreen extends StatefulWidget {
+  const HighPriorityTasksScreen({super.key});
 
   @override
-  State<HighPriorityScreen> createState() => _HighPriorityScreenState();
+  State<HighPriorityTasksScreen> createState() => _HighPriorityTasksScreenState();
 }
 
-class _HighPriorityScreenState extends State<HighPriorityScreen> {
+class _HighPriorityTasksScreenState extends State<HighPriorityTasksScreen> {
   List<TaskModel> highPriorityTasks = [];
   bool isLoading = false;
 

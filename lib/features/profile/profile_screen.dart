@@ -9,6 +9,8 @@ import 'package:tasky_app/core/widgets/custom_svg_picture.dart';
 import 'package:tasky_app/features/profile/user_details_screen.dart';
 import 'package:tasky_app/features/welcome/welcome_screen.dart';
 
+import '../../core/constants/storage_key.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -33,7 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       isLoading = true;
     });
     setState(() {
-      username = PreferencesManager().getString("username") ?? "";
+      username = PreferencesManager().getString(StorageKey.userName) ?? "";
       motivationQuote = PreferencesManager().getString("motivation_quote") ?? "One task at a time. One step closer";
       userImagePath = PreferencesManager().getString("user_image");
       isLoading = false;
@@ -174,7 +176,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Divider(),
           ListTile(
             onTap: () async {
-              PreferencesManager().remove("username");
+              PreferencesManager().remove(StorageKey.userName);
               PreferencesManager().remove("motivation_quote");
               PreferencesManager().remove("tasks");
               Navigator.pushAndRemoveUntil(

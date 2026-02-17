@@ -10,6 +10,8 @@ import 'package:tasky_app/features/home/components/achieved_task_widget.dart';
 import 'package:tasky_app/features/home/components/high_priority_tasks_widget.dart';
 import 'package:tasky_app/features/home/components/sliver_task_list_widget.dart';
 
+import '../../core/constants/storage_key.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -37,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _loadUserName() async {
     setState(() {
-      username = PreferencesManager().getString("username");
+      username = PreferencesManager().getString(StorageKey.userName);
       userImagePath = PreferencesManager().getString("user_image");
     });
   }

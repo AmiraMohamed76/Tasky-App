@@ -6,6 +6,8 @@ import 'package:tasky_app/core/theme/light_theme.dart';
 import 'package:tasky_app/features/navigation/main_screen.dart';
 import 'package:tasky_app/features/welcome/welcome_screen.dart';
 
+import 'core/constants/storage_key.dart';
+
 
 
 void main() async {
@@ -14,7 +16,7 @@ void main() async {
   await PreferencesManager().init();
   ThemeController().init();
 
-  String? username = PreferencesManager().getString("username");
+  String? username = PreferencesManager().getString(StorageKey.userName);
 
   runApp(MyApp(username: username));
 }

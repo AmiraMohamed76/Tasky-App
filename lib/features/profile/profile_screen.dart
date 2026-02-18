@@ -9,6 +9,8 @@ import 'package:tasky_app/core/widgets/custom_svg_picture.dart';
 import 'package:tasky_app/features/profile/user_details_screen.dart';
 import 'package:tasky_app/features/welcome/welcome_screen.dart';
 
+import '../../core/constants/storage_key.dart';
+
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -33,9 +35,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       isLoading = true;
     });
     setState(() {
-      username = PreferencesManager().getString("username") ?? "";
-      motivationQuote = PreferencesManager().getString("motivation_quote") ?? "One task at a time. One step closer";
-      userImagePath = PreferencesManager().getString("user_image");
+      username = PreferencesManager().getString(StorageKey.userName) ?? "";
+      motivationQuote = PreferencesManager().getString(StorageKey.motivationQuote) ?? "One task at a time. One step closer";
+      userImagePath = PreferencesManager().getString(StorageKey.userImage);
       isLoading = false;
 
     });
@@ -174,9 +176,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           Divider(),
           ListTile(
             onTap: () async {
-              PreferencesManager().remove("username");
-              PreferencesManager().remove("motivation_quote");
-              PreferencesManager().remove("tasks");
+              PreferencesManager().remove(StorageKey.userName);
+              PreferencesManager().remove(StorageKey.motivationQuote);
+              PreferencesManager().remove(StorageKey.tasks);
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
@@ -200,7 +202,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   void _saveImage(XFile file) async {
     final appDir = await getApplicationDocumentsDirectory();
     final newFile = await File(file.path).copy('${appDir.path}/${file.name}');
-    PreferencesManager().setString("user_image", newFile.path);
+    PreferencesManager().setString(StorageKey.userImage, newFile.path);
   }
 }
 

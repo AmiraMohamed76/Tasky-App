@@ -3,11 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tasky_app/core/widgets/custom_svg_picture.dart';
-import 'package:tasky_app/features/home/home_controller.dart';
+import 'package:tasky_app/features/home/controller/home_controller.dart';
 import 'package:tasky_app/features/add_task/add_task_screen.dart';
 import 'package:tasky_app/features/home/components/achieved_task_widget.dart';
 import 'package:tasky_app/features/home/components/high_priority_tasks_widget.dart';
 import 'package:tasky_app/features/home/components/sliver_task_list_widget.dart';
+import 'package:tasky_app/features/tasks/controller/tasks_controller.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -52,16 +53,9 @@ class HomeScreen extends StatelessWidget {
                           children: [
                             Selector<HomeController, String?>(
                               selector:
-                                  (
-                                    BuildContext context,
-                                    HomeController controller,
-                                  ) => controller.username,
+                                  (BuildContext context, HomeController controller) => controller.username,
                               builder:
-                                  (
-                                    BuildContext context,
-                                    String? username,
-                                    Widget? child,
-                                  ) {
+                                  (BuildContext context, String? username, Widget? child) {
                                     return Text(
                                       "Good Evening ,$username",
                                       style: Theme.of(
@@ -72,16 +66,9 @@ class HomeScreen extends StatelessWidget {
                             ),
                             Selector<HomeController, String>(
                               selector:
-                                  (
-                                    BuildContext context,
-                                    HomeController controller,
-                                  ) => controller.motivationQuote,
+                                  (BuildContext context, HomeController controller) => controller.motivationQuote,
                               builder:
-                                  (
-                                    BuildContext context,
-                                    String motivationQuote,
-                                    Widget? child,
-                                  ) {
+                                  (BuildContext context, String motivationQuote, Widget? child) {
                                     return Text(
                                       motivationQuote,
                                       style: Theme.of(
@@ -143,7 +130,7 @@ class HomeScreen extends StatelessWidget {
                   );
                   if (result != null && result) {
                     // we have to use HomeController context coz context is navigation context
-                    controllerContext.read<HomeController>().loadTasks();
+                    controllerContext.read<TasksController>().init();
                   }
                 },
                 label: Text("Add New Task"),

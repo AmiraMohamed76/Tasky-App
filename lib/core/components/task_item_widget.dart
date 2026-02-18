@@ -123,6 +123,7 @@ class TaskItemWidget extends StatelessWidget {
   }
 
   Future<bool?> _showBottomSheet(BuildContext context, TaskModel task) {
+    print("TaskId: ${task.id} | ${task.taskName} |${task.taskDescription} |${task.isHighPriority} |${task.isDone}");
     final GlobalKey<FormState> key = GlobalKey<FormState>();
     final TextEditingController taskNameController = TextEditingController(
       text: task.taskName,
@@ -197,6 +198,7 @@ class TaskItemWidget extends StatelessWidget {
                       ),
                     ),
                     ElevatedButton.icon(
+
                       onPressed: () async {
                         if (key.currentState?.validate() ?? false) {
                           // check by key {tasks} -> String?

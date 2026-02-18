@@ -1,91 +1,14 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:tasky_app/core/services/preferences_manager.dart';
-import '../../core/constants/storage_key.dart';
-import '../../model/task_model.dart';
+import 'package:provider/provider.dart';
+import 'package:tasky_app/features/tasks/controller/tasks_controller.dart';
 import '../../core/components/task_list_widget.dart';
 
-class CompleteTasksScreen extends StatefulWidget {
+class CompleteTasksScreen extends StatelessWidget {
   const CompleteTasksScreen({super.key});
 
   @override
-  State<CompleteTasksScreen> createState() => _CompleteTasksScreenState();
-}
-
-class _CompleteTasksScreenState extends State<CompleteTasksScreen> {
-  bool isLoading = false;
-  List<TaskModel> completedTasks = [];
-
-  @override
-  void initState() {
-    super.initState();
-
-    _loadTask();
-  }
-
-  void _loadTask() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    final finalTasks = PreferencesManager().getString(StorageKey.tasks);
-    if (finalTasks != null) {
-      final taskDecoded = jsonDecode(finalTasks) as List<dynamic>;
-      setState(() {
-        completedTasks = taskDecoded
-            .map((element) => TaskModel.fromJson(element))
-            .where((element) => element.isDone == true)
-            .toList();
-      });
-    }
-    setState(() {
-      isLoading = false;
-    });
-  }
-
-  void _onTap(bool? value, int? index) async {
-    setState(() {
-      completedTasks[index!].isDone = value ?? false;
-    });
-    final allData = PreferencesManager().getString(StorageKey.tasks);
-
-    if (allData != null) {
-      final allDataList = (jsonDecode(allData) as List)
-          .map((element) => TaskModel.fromJson(element))
-          .toList();
-
-      /// newIndex -> item index in fullList, index -> same item index but in completedList to update item in fullList
-      final newIndex = allDataList.indexWhere(
-        (e) => e.id == completedTasks[index!].id,
-      );
-      allDataList[newIndex] = completedTasks[index!];
-      await PreferencesManager().setString(StorageKey.tasks, jsonEncode(allDataList));
-
-      // To update screen after check task
-      _loadTask();
-    }
-  }
-
-  void _onDelete(int? id) {
-    List<TaskModel> tasks = [];
-    final tasksList = PreferencesManager().getString(StorageKey.tasks);
-    if (tasksList != null) {
-      final tasksListDecode = jsonDecode(tasksList) as List<dynamic>;
-      tasks = tasksListDecode.map((e) => TaskModel.fromJson(e)).toList();
-      tasks.removeWhere((e) => e.id == id);
-
-      setState(() {
-        completedTasks.removeWhere((e) => e.id == id);
-      });
-
-      final updatedTasks = tasks.map((e) => e.toJson()).toList();
-      PreferencesManager().setString(StorageKey.tasks, jsonEncode(updatedTasks));
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final controller = context.read<TasksController>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -101,16 +24,25 @@ class _CompleteTasksScreenState extends State<CompleteTasksScreen> {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: isLoading
+            child: controller.isLoading
                 ? Center(
                     child: CircularProgressIndicator(color: Color(0xFFFFFCFC)),
                   )
-                : TaskListWidget(
-                    tasks: completedTasks,
-                    onTap: (bool? value, int? index) => _onTap(value, index),
-                    onDelete: (int? id) => _onDelete(id),
-                    onEdit: () => _loadTask(),
-                    emptyMessage: "No Tasks Found",
+                : Consumer<TasksController>(
+                    builder:
+                        (BuildContext context, TasksController valueController, Widget? child) {
+                          return TaskListWidget(
+                            tasks: valueController.completeTasks,
+                            onTap: (bool? value, int? index) =>
+                                controller.doneTask(
+                                  value,
+                                  valueController.completeTasks[index!].id,
+                                ),
+                            onDelete: (int? id) => controller.deleteTask(id),
+                            onEdit: () => controller.init(),
+                            emptyMessage: "No Tasks Found",
+                          );
+                        },
                   ),
           ),
         ),

@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tasky_app/core/widgets/custom_check_box.dart';
 import 'package:tasky_app/core/widgets/custom_svg_picture.dart';
-import 'package:tasky_app/features/home/home_controller.dart';
-import 'package:tasky_app/model/task_model.dart';
 import 'package:tasky_app/features/tasks/high_priority_tasks_screen.dart';
-
 import '../../../core/services/theme_controller.dart';
+import '../../tasks/controller/tasks_controller.dart';
 
 class HighPriorityTasksWidget extends StatelessWidget {
 
@@ -15,9 +13,9 @@ class HighPriorityTasksWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HomeController>(
-      builder: (BuildContext context, HomeController value, Widget? child) {
-        final controller = context.read<HomeController>();
+    return Consumer<TasksController>(
+      builder: (BuildContext context, TasksController value, Widget? child) {
+        final controller = context.read<TasksController>();
 
         final tasks = value.tasks;
         return Container(
@@ -71,10 +69,7 @@ class HighPriorityTasksWidget extends StatelessWidget {
                             CustomCheckBox(
                               value: task.isDone,
                               onChanged: (bool? value) {
-                                final index = tasks.indexWhere(
-                                      (e) => e.id == task.id,
-                                );
-                                controller.doneTask(value, index);
+                                controller.doneTask(value, task.id);
                               },
                             ),
                             Flexible(
@@ -101,7 +96,7 @@ class HighPriorityTasksWidget extends StatelessWidget {
                           },
                         ),
                       );
-                      controller.loadTasks();
+                      controller.init();
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),

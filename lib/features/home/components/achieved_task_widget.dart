@@ -1,9 +1,7 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:tasky_app/features/home/home_controller.dart';
-
+import 'package:tasky_app/features/tasks/controller/tasks_controller.dart';
 import '../../../core/services/theme_controller.dart';
 
 class AchievedTaskWidget extends StatelessWidget {
@@ -12,8 +10,8 @@ class AchievedTaskWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<HomeController>(
-      builder: (BuildContext context, HomeController value, Widget? child) {
+    return Consumer<TasksController>(
+      builder: (BuildContext context, TasksController value, Widget? child) {
         return Container(
           width: double.infinity,
           decoration: BoxDecoration(

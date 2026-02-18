@@ -29,35 +29,66 @@ class HomeScreen extends StatelessWidget {
                       spacing: 8,
                       children: [
                         Selector<HomeController, String?>(
-                          selector: (BuildContext context, HomeController controller) => controller.userImagePath,
-                          builder: (BuildContext context, userImagePath, Widget? child) {
-                            return CircleAvatar(
-                              backgroundImage: userImagePath == null
-                                  ? AssetImage("assets/images/person.png")
-                                  : FileImage(File(userImagePath!)),
-                            );
-                          },
+                          selector:
+                              (
+                                BuildContext context,
+                                HomeController controller,
+                              ) => controller.userImagePath,
+                          builder:
+                              (
+                                BuildContext context,
+                                userImagePath,
+                                Widget? child,
+                              ) {
+                                return CircleAvatar(
+                                  backgroundImage: userImagePath == null
+                                      ? AssetImage("assets/images/person.png")
+                                      : FileImage(File(userImagePath)),
+                                );
+                              },
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Selector<HomeController, String?>(
-                              selector: (BuildContext context, HomeController controller) => controller.username,
-                              builder: (BuildContext context, String? username, Widget? child) {
-                                return Text(
-                                  "Good Evening ,$username",
-                                  style: Theme.of(context).textTheme.titleMedium,
-                                );
-                              },
+                              selector:
+                                  (
+                                    BuildContext context,
+                                    HomeController controller,
+                                  ) => controller.username,
+                              builder:
+                                  (
+                                    BuildContext context,
+                                    String? username,
+                                    Widget? child,
+                                  ) {
+                                    return Text(
+                                      "Good Evening ,$username",
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.titleMedium,
+                                    );
+                                  },
                             ),
                             Selector<HomeController, String>(
-                              selector: (BuildContext context, HomeController controller) => controller.motivationQuote,
-                              builder: (BuildContext context, String motivationQuote, Widget? child) {
-                                return Text(
-                                 motivationQuote,
-                                  style: Theme.of(context).textTheme.titleSmall,
-                                );
-                              },
+                              selector:
+                                  (
+                                    BuildContext context,
+                                    HomeController controller,
+                                  ) => controller.motivationQuote,
+                              builder:
+                                  (
+                                    BuildContext context,
+                                    String motivationQuote,
+                                    Widget? child,
+                                  ) {
+                                    return Text(
+                                      motivationQuote,
+                                      style: Theme.of(
+                                        context,
+                                      ).textTheme.titleSmall,
+                                    );
+                                  },
                             ),
                           ],
                         ),
@@ -121,7 +152,7 @@ class HomeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(100),
                 ),
               );
-            }
+            },
           ),
         ),
       ),

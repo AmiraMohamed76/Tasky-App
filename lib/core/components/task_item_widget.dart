@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:tasky_app/core/constants/app_sizes.dart';
 import 'package:tasky_app/core/enums/task_item_actions_enum.dart';
 import 'package:tasky_app/core/services/theme_controller.dart';
 import 'package:tasky_app/model/task_model.dart';
@@ -32,13 +33,13 @@ class TaskItemWidget extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppSizes.r20),
         border: Border.all(color: Theme.of(context).colorScheme.primary),
       ),
       child: Row(
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 16.0, left: 8),
+            padding: EdgeInsets.only(right: AppSizes.w16, left: AppSizes.w8),
             child: CustomCheckBox(
               value: task.isDone,
               onChanged: (bool? value) => onChanged(value),
@@ -106,7 +107,7 @@ class TaskItemWidget extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text("Cancel", style: TextStyle(fontSize: 18)),
+              child: Text("Cancel", style: TextStyle(fontSize: AppSizes.sp18)),
             ),
             TextButton(
               onPressed: () {
@@ -114,7 +115,7 @@ class TaskItemWidget extends StatelessWidget {
                 Navigator.pop(context);
               },
               style: TextButton.styleFrom(foregroundColor: Colors.red),
-              child: Text("Delete", style: TextStyle(fontSize: 18)),
+              child: Text("Delete", style: TextStyle(fontSize: AppSizes.sp18)),
             ),
           ],
         );
@@ -123,7 +124,6 @@ class TaskItemWidget extends StatelessWidget {
   }
 
   Future<bool?> _showBottomSheet(BuildContext context, TaskModel task) {
-    print("TaskId: ${task.id} | ${task.taskName} |${task.taskDescription} |${task.isHighPriority} |${task.isDone}");
     final GlobalKey<FormState> key = GlobalKey<FormState>();
     final TextEditingController taskNameController = TextEditingController(
       text: task.taskName,
@@ -138,11 +138,11 @@ class TaskItemWidget extends StatelessWidget {
         return StatefulBuilder(
           builder: (BuildContext context, void Function(void Function()) setState) {
             return Padding(
-              padding: const EdgeInsets.only(
-                top: 20,
-                left: 16,
-                right: 16,
-                bottom: 8.0,
+              padding: EdgeInsets.only(
+                top: AppSizes.h20,
+                left: AppSizes.w16,
+                right: AppSizes.w16,
+                bottom: AppSizes.h8,
               ),
               child: Form(
                 key: key,
@@ -165,7 +165,7 @@ class TaskItemWidget extends StatelessWidget {
                               },
                               title: "Task Name",
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: AppSizes.h20),
                             CustomTextFormField(
                               controller: taskDescriptionController,
                               hintText:
@@ -173,7 +173,7 @@ class TaskItemWidget extends StatelessWidget {
                               maxLines: 5,
                               title: "Task Description",
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: AppSizes.h20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -232,12 +232,10 @@ class TaskItemWidget extends StatelessWidget {
                             final tasksListEncode = jsonEncode(tasksList);
                             await PreferencesManager().setString(StorageKey.tasks, tasksListEncode);
 
+                            if(!context.mounted) return;
                             Navigator.of(context).pop(true);
                         }
                       },
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: Size(MediaQuery.of(context).size.width, 40),
-                      ),
                       label: Text("Edit Task"),
                       icon: Icon(Icons.edit),
                     ),

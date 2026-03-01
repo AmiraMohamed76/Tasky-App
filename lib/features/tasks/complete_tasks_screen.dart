@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tasky_app/core/constants/app_sizes.dart';
 import 'package:tasky_app/features/tasks/controller/tasks_controller.dart';
 import '../../core/components/task_list_widget.dart';
 
@@ -14,7 +15,7 @@ class CompleteTasksScreen extends StatelessWidget {
       children: [
         Center(
           child: Padding(
-            padding: const EdgeInsets.all(18.0),
+            padding: EdgeInsets.symmetric(vertical: AppSizes.ph18, horizontal: AppSizes.pw18),
             child: Text(
               "Completed Tasks",
               style: Theme.of(context).textTheme.labelSmall,
@@ -23,7 +24,7 @@ class CompleteTasksScreen extends StatelessWidget {
         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.symmetric(vertical: AppSizes.ph16, horizontal: AppSizes.pw16),
             child: controller.isLoading
                 ? Center(
                     child: CircularProgressIndicator(color: Color(0xFFFFFCFC)),

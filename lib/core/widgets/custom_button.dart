@@ -9,9 +9,6 @@ class CustomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return  ElevatedButton(
       onPressed: () => onPressed,
-      style: ElevatedButton.styleFrom(
-        fixedSize: Size(MediaQuery.of(context).size.width, 40),
-      ),
       child: Text(btnTitle),
     );
   }

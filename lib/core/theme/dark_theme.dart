@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../constants/app_sizes.dart';
+
 ThemeData darkTheme = ThemeData(
   useMaterial3: true,
   brightness: Brightness.dark,
@@ -17,7 +19,7 @@ ThemeData darkTheme = ThemeData(
     backgroundColor: Color(0xFF181818),
     titleTextStyle: TextStyle(
       fontWeight: FontWeight.w400,
-      fontSize: 20,
+      fontSize: AppSizes.sp20,
       color: Color(0xFFFFFCFC),
     ),
     iconTheme: IconThemeData(color: Color(0xFFFFFCFC)),
@@ -50,60 +52,63 @@ ThemeData darkTheme = ThemeData(
     }),
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ButtonStyle(
-      foregroundColor: WidgetStateProperty.all(Color(0xFFFFFCFC)),
-      backgroundColor: WidgetStateProperty.all(Color(0xFF15B86C)),
-      textStyle: WidgetStateProperty.all(
-        TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+    style: ElevatedButton.styleFrom(
+      foregroundColor: Color(0xFFFFFCFC),
+      backgroundColor: Color(0xFF15B86C),
+      minimumSize:  Size.fromHeight(AppSizes.h40),
+      textStyle: TextStyle(
+        fontSize: AppSizes.sp14,
+        fontWeight: FontWeight.w500,
       ),
     ),
   ),
   textButtonTheme: TextButtonThemeData(
-    style: ButtonStyle(
-      foregroundColor: WidgetStateProperty.all(Colors.white),
-    )
+    style: TextButton.styleFrom(foregroundColor: Colors.white),
   ),
   floatingActionButtonTheme: FloatingActionButtonThemeData(
     backgroundColor: Color(0xFF15B86C),
     foregroundColor: Color(0xFFFFFCFC),
-    extendedTextStyle: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+    extendedTextStyle: TextStyle(
+      fontSize: AppSizes.sp14,
+      fontWeight: FontWeight.w500,
+    ),
   ),
   textTheme: TextTheme(
     displaySmall: TextStyle(
-      fontSize: 24,
+      fontSize: AppSizes.sp24,
       fontWeight: FontWeight.w400,
       color: Color(0xFFFFFCFC),
     ),
     displayMedium: TextStyle(
       color: Color(0xFFFFFFFF),
-      fontSize: 28,
+      fontSize: AppSizes.sp28,
       fontWeight: FontWeight.w400,
     ),
     displayLarge: TextStyle(
-      fontSize: 32,
+      fontSize: AppSizes.sp32,
       fontWeight: FontWeight.w400,
       color: Color(0xFFFFFCFC),
     ),
     labelSmall: TextStyle(
       color: Color(0xFFC6C6C6),
-      fontSize: 20,
+      fontSize: AppSizes.sp20,
       fontWeight: FontWeight.w400,
     ),
-    labelLarge: TextStyle(color: Colors.white, fontSize: 24),
+    labelLarge: TextStyle(color: Colors.white, fontSize: AppSizes.sp24),
     labelMedium: TextStyle(color: Colors.white),
     titleSmall: TextStyle(
       fontWeight: FontWeight.w400,
-      fontSize: 14,
+      fontSize: AppSizes.sp14,
       color: Color(0xFFC6C6C6),
     ),
     titleMedium: TextStyle(
-      fontSize: 16,
+      fontSize: AppSizes.sp16,
       fontWeight: FontWeight.w400,
       color: Color(0xFFFFFCFC),
       overflow: TextOverflow.ellipsis,
     ),
     titleLarge: TextStyle(
-      fontSize: 16,
+      fontSize: AppSizes.sp16,
       fontWeight: FontWeight.w400,
       color: Color(0xFFA0A0A0),
       decoration: TextDecoration.lineThrough,
@@ -133,7 +138,7 @@ ThemeData darkTheme = ThemeData(
   listTileTheme: ListTileThemeData(
     titleTextStyle: TextStyle(
       color: Color(0xFFC6C6C6),
-      fontSize: 16,
+      fontSize: AppSizes.sp16,
       fontWeight: FontWeight.w400,
     ),
   ),
@@ -156,11 +161,7 @@ ThemeData darkTheme = ThemeData(
     shadowColor: Colors.grey,
     menuPadding: EdgeInsets.only(bottom: 0),
     labelTextStyle: WidgetStateProperty.all(
-      TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w400,
-      ),
+      TextStyle(fontSize: AppSizes.sp16, fontWeight: FontWeight.w400),
     ),
   ),
-
 );

@@ -43,6 +43,7 @@ class AddTaskController extends ChangeNotifier {
       await PreferencesManager().setString(StorageKey.tasks, tasksListEncode);
 
       // navigation with result (true) value to check on this result on HomeScreen to check if add task will loadTasks again to update list
+      if(!context.mounted) return;
       Navigator.of(context).pop(true);
     }
 

@@ -28,7 +28,7 @@ class TaskItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 56,
+      height: AppSizes.h56,
       width: double.infinity,
       alignment: Alignment.center,
       decoration: BoxDecoration(
@@ -72,7 +72,7 @@ class TaskItemWidget extends StatelessWidget {
               color: ThemeController.isDark()
                   ? (task.isDone ? Color(0xFFA0A0A0) : Color(0xFFC6C6C6))
                   : (task.isDone ? Color(0xFF6A6A6A) : Color(0xFF3A4640)),
-              size: 24,
+              size: AppSizes.r24,
             ),
             onSelected: (value) async {
               switch (value) {

@@ -68,6 +68,9 @@ ThemeData darkTheme = ThemeData(
   floatingActionButtonTheme: FloatingActionButtonThemeData(
     backgroundColor: Color(0xFF15B86C),
     foregroundColor: Color(0xFFFFFCFC),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(AppSizes.r100),
+    ),
     extendedTextStyle: TextStyle(
       fontSize: AppSizes.sp14,
       fontWeight: FontWeight.w500,
@@ -121,17 +124,17 @@ ThemeData darkTheme = ThemeData(
     filled: true,
     fillColor: Color(0xFF282828),
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(AppSizes.r16),
       borderSide: BorderSide.none,
     ),
     errorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(AppSizes.r16),
       borderSide: BorderSide(color: Colors.red, width: 0.7),
     ),
   ),
   checkboxTheme: CheckboxThemeData(
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-    side: BorderSide(color: Color(0xFF6E6E6E), width: 2),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.r4)),
+    side: BorderSide(color: Color(0xFF6E6E6E), width: AppSizes.w2),
   ),
   iconTheme: IconThemeData(color: Color(0xFFFFFCFC)),
   dividerTheme: DividerThemeData(color: Color(0xFF6E6E6E), thickness: 1),
@@ -156,7 +159,7 @@ ThemeData darkTheme = ThemeData(
   splashFactory: NoSplash.splashFactory,
   popupMenuTheme: PopupMenuThemeData(
     color: Color(0xFF181818),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.r16)),
     elevation: 2,
     shadowColor: Colors.grey,
     menuPadding: EdgeInsets.only(bottom: 0),

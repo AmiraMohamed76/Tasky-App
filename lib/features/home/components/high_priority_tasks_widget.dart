@@ -52,10 +52,7 @@ class HighPriorityTasksWidget extends StatelessWidget {
                   Expanded(
                     child: tasks.isEmpty
                         ? Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: AppSizes.pw30,
-                              vertical: AppSizes.ph30,
-                            ),
+                            padding: EdgeInsets.all(AppSizes.pw30,),
                             child: Text("No Data", textAlign: TextAlign.center),
                           )
                         : ListView.builder(
@@ -116,11 +113,11 @@ class HighPriorityTasksWidget extends StatelessWidget {
                       controller.init();
                     },
                     child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: AppSizes.ph8, horizontal: AppSizes.pw8),
+                      padding: EdgeInsets.all(AppSizes.pw8),
                       child: Container(
                         width: AppSizes.w48,
                         height: AppSizes.h48,
-                        padding: EdgeInsets.symmetric(vertical: AppSizes.ph8, horizontal: AppSizes.pw8),
+                        padding: EdgeInsets.all(AppSizes.pw8),
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: Theme.of(context).colorScheme.primaryContainer,

@@ -15,7 +15,7 @@ class HighPriorityTasksScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text("High Priority Tasks")),
       body: Padding(
-        padding:  EdgeInsets.symmetric(vertical: AppSizes.ph16, horizontal: AppSizes.pw16),
+        padding:  EdgeInsets.all(AppSizes.pw16),
         child: controller.isLoading
             ? Center(child: CircularProgressIndicator(color: Color(0xFFFFFCFC)))
             : Consumer<TasksController>(

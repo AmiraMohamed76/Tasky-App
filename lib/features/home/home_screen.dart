@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
       create: (context) => HomeController()..init(),
       child: Scaffold(
         body: Padding(
-          padding:  EdgeInsets.symmetric(horizontal: AppSizes.pw16, vertical: AppSizes.ph16),
+          padding:  EdgeInsets.all(AppSizes.pw16),
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
@@ -131,9 +131,7 @@ class HomeScreen extends StatelessWidget {
                 },
                 label: Text("Add New Task"),
                 icon: Icon(Icons.add),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(AppSizes.r100),
-                ),
+
               );
             },
           ),

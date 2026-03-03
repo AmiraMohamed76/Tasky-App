@@ -47,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.symmetric(vertical: AppSizes.ph16, horizontal: AppSizes.pw16),
+      padding:  EdgeInsets.all(AppSizes.pw16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

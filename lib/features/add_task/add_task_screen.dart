@@ -20,7 +20,7 @@ class AddTaskScreen extends StatelessWidget {
           appBar: AppBar(title: Text("New Task")),
           body: SafeArea(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppSizes.ph16, vertical: AppSizes.pw8),
+              padding: EdgeInsets.all(AppSizes.pw8),
               child: Form(
                 key: controller.key,
                 child: Column(

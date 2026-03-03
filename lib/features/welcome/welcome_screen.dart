@@ -68,7 +68,7 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   SizedBox(height: AppSizes.h24),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: AppSizes.w16),
+                    padding: EdgeInsets.all(AppSizes.w16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

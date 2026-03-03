@@ -15,7 +15,7 @@ class CompleteTasksScreen extends StatelessWidget {
       children: [
         Center(
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: AppSizes.ph18, horizontal: AppSizes.pw18),
+            padding: EdgeInsets.all(AppSizes.pw18),
             child: Text(
               "Completed Tasks",
               style: Theme.of(context).textTheme.labelSmall,
@@ -24,7 +24,7 @@ class CompleteTasksScreen extends StatelessWidget {
         ),
         Expanded(
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: AppSizes.ph16, horizontal: AppSizes.pw16),
+            padding: EdgeInsets.all(AppSizes.pw16),
             child: controller.isLoading
                 ? Center(
                     child: CircularProgressIndicator(color: Color(0xFFFFFCFC)),

@@ -45,7 +45,7 @@ class SliverTaskListWidget extends StatelessWidget {
                     );
                   },
                   separatorBuilder: (BuildContext context, int index) {
-                    return SizedBox(height: 8);
+                    return SizedBox(height: AppSizes.h8);
                   },
                 ),
               );

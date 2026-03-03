@@ -24,7 +24,7 @@ class AchievedTaskWidget extends StatelessWidget {
                   : Color(0xFFD1DAD6),
             ),
           ),
-          padding: EdgeInsets.symmetric(horizontal: AppSizes.pw16, vertical: AppSizes.ph16),
+          padding: EdgeInsets.all(AppSizes.pw16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

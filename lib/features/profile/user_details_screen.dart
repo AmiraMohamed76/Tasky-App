@@ -42,7 +42,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
         child: Form(
           key: _key,
           child: Padding(
-            padding: EdgeInsets.symmetric(vertical: AppSizes.ph16, horizontal: AppSizes.pw16),
+            padding: EdgeInsets.all(AppSizes.pw16),
             child: Column(
               children: [
                 Expanded(

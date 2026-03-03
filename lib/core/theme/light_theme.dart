@@ -67,6 +67,9 @@ ThemeData lightTheme = ThemeData(
   floatingActionButtonTheme: FloatingActionButtonThemeData(
     backgroundColor: Color(0xFF14A662),
     foregroundColor: Color(0xFFFFFCFC),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(AppSizes.r100),
+    ),
     extendedTextStyle: TextStyle(fontSize: AppSizes.sp14, fontWeight: FontWeight.w500),
   ),
   textTheme: TextTheme(
@@ -117,25 +120,25 @@ ThemeData lightTheme = ThemeData(
     filled: true,
     fillColor: Color(0xFFFFFFFF),
     border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(AppSizes.r16),
       borderSide: BorderSide(color: Color(0xFFD1DAD6), width: 0.7),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(AppSizes.r16),
       borderSide: BorderSide(color: Color(0xFFD1DAD6), width: 0.7),
     ),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(AppSizes.r16),
       borderSide: BorderSide(color: Color(0xFFD1DAD6), width: 0.7),
     ),
     errorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(AppSizes.r16),
       borderSide: BorderSide(color: Colors.red, width: 0.7),
     ),
   ),
   checkboxTheme: CheckboxThemeData(
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-    side: BorderSide(color: Color(0xFFD1DAD6), width: 2),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.r4)),
+    side: BorderSide(color: Color(0xFFD1DAD6), width: AppSizes.w2),
   ),
   iconTheme: IconThemeData(color: Color(0xFF3A4640)),
   dividerTheme: DividerThemeData(color: Color(0xFFD1DAD6), thickness: 1),
@@ -160,7 +163,7 @@ ThemeData lightTheme = ThemeData(
   splashFactory: NoSplash.splashFactory,
   popupMenuTheme: PopupMenuThemeData(
     color: Color(0xFFF6F7F9),
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppSizes.r16)),
     elevation: 2,
     shadowColor: Colors.grey,
     menuPadding: EdgeInsets.only(bottom: 0),

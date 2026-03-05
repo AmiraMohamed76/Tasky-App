@@ -40,17 +40,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
     });
     setState(() {
       username = PreferencesManager().getString(StorageKey.userName) ?? "";
-      motivationQuote = PreferencesManager().getString(StorageKey.motivationQuote) ?? "One task at a time. One step closer";
+      motivationQuote =
+          PreferencesManager().getString(StorageKey.motivationQuote) ??
+          "One task at a time. One step closer";
       userImagePath = PreferencesManager().getString(StorageKey.userImage);
       isLoading = false;
-
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.all(AppSizes.pw16),
+      padding: EdgeInsets.all(AppSizes.pw16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -89,7 +90,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     GestureDetector(
                       onTap: () async {
-                        showImageSourceDialog(context , (XFile file){
+                        showImageSourceDialog(context, (XFile file) {
                           // save file
                           _saveImage(file);
                           setState(() {
@@ -137,8 +138,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           SizedBox(height: AppSizes.h24),
           Text("Profile Info", style: Theme.of(context).textTheme.labelSmall),
-          ListTile(
-            onTap: () async {
+          _buildProfileItem(
+            "User Details",
+            "assets/images/profile.svg",
+            () async {
               final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -154,54 +157,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _loadData();
               }
             },
-            title: Text("User Details"),
-            leading: CustomSvgPicture(imagePath: "assets/images/profile.svg"),
-            trailing: CustomSvgPicture(imagePath: "assets/images/arrow.svg"),
-            contentPadding: EdgeInsets.zero,
           ),
-          Divider(),
-          ListTile(
-            title: Text("Dark Mode"),
-            leading: CustomSvgPicture(imagePath: "assets/images/dark.svg"),
-            trailing: ValueListenableBuilder<ThemeMode>(
-              valueListenable: ThemeController.themeNotifier,
-              builder: (BuildContext context, value, Widget? child) {
-                return Switch(
-                  value: value == ThemeMode.dark,
-                  // check if theme is dark (true) or light (false)
-                  onChanged: (bool value) async {
-                    ThemeController.toggleTheme();
-                  },
-                );
-              },
-            ),
-            contentPadding: EdgeInsets.zero,
+          _buildProfileItem(
+            "Dark Mode",
+            "assets/images/profile.svg",
+            () {},
+            isDarkMode: true,
           ),
-          Divider(),
-          ListTile(
-            onTap: () async {
-              PreferencesManager().remove(StorageKey.userName);
-              PreferencesManager().remove(StorageKey.motivationQuote);
-              await FileStorageManager().clear();
+          _buildProfileItem("Log Out", "assets/images/log_out.svg", () async {
+            PreferencesManager().remove(StorageKey.userName);
+            PreferencesManager().remove(StorageKey.motivationQuote);
+            await FileStorageManager().clear();
 
-              if(!context.mounted) return;
-              context.read<TasksController>().clearTasks();
+            if (!context.mounted) return;
+            context.read<TasksController>().clearTasks();
 
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (BuildContext context) {
-                    return WelcomeScreen();
-                  },
-                ),
-                (Route<dynamic> route) => false,
-              );
-            },
-            title: Text("Log Out"),
-            leading: CustomSvgPicture(imagePath: "assets/images/log_out.svg"),
-            trailing: CustomSvgPicture(imagePath: "assets/images/arrow.svg"),
-            contentPadding: EdgeInsets.zero,
-          ),
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return WelcomeScreen();
+                },
+              ),
+              (Route<dynamic> route) => false,
+            );
+          }),
         ],
       ),
     );
@@ -265,5 +245,39 @@ void showImageSourceDialog(BuildContext context, Function(XFile) selectedFile) {
         ],
       );
     },
+  );
+}
+
+_buildProfileItem(
+  String title,
+  String leadingImagePath,
+  Function onTap, {
+  bool withDivider = true,
+  bool isDarkMode = false,
+}) {
+  return Column(
+    children: [
+      ListTile(
+        onTap: () => onTap(),
+        title: Text("User Details"),
+        leading: CustomSvgPicture(imagePath: leadingImagePath),
+        trailing: isDarkMode
+            ? ValueListenableBuilder<ThemeMode>(
+                valueListenable: ThemeController.themeNotifier,
+                builder: (BuildContext context, value, Widget? child) {
+                  return Switch(
+                    value: value == ThemeMode.dark,
+                    // check if theme is dark (true) or light (false)
+                    onChanged: (bool value) async {
+                      ThemeController.toggleTheme();
+                    },
+                  );
+                },
+              )
+            : CustomSvgPicture(imagePath: "assets/images/arrow.svg"),
+        contentPadding: EdgeInsets.zero,
+      ),
+      if (withDivider) Divider(),
+    ],
   );
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:tasky_app/core/services/file_storage_manager.dart';
 import 'package:tasky_app/core/services/preferences_manager.dart';
 import 'package:tasky_app/core/services/theme_controller.dart';
 import 'package:tasky_app/core/theme/dark_theme.dart';
@@ -16,6 +17,7 @@ void main() async {
   await ScreenUtil.ensureScreenSize();
 
   await PreferencesManager().init();
+  await FileStorageManager().init();
 
   ThemeController().init();
 

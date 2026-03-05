@@ -85,7 +85,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
                         userNameController.value.text.trim(),
                       );
                       await PreferencesManager().setString(
-                        "motivation_quote",
+                        StorageKey.motivationQuote,
                         motivationQuoteController.value.text.trim(),
                       );
                       if(!context.mounted) return;

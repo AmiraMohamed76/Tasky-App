@@ -3,10 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:tasky_app/core/services/file_storage_manager.dart';
 import 'package:tasky_app/core/services/preferences_manager.dart';
 import 'package:tasky_app/core/services/theme_controller.dart';
 import 'package:tasky_app/core/widgets/custom_svg_picture.dart';
 import 'package:tasky_app/features/profile/user_details_screen.dart';
+import 'package:tasky_app/features/tasks/controller/tasks_controller.dart';
 import 'package:tasky_app/features/welcome/welcome_screen.dart';
 
 import '../../core/constants/app_sizes.dart';
@@ -96,7 +99,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       },
                       child: Container(
                         width: AppSizes.w36,
-                        height: AppSizes.h36,
+                        height: AppSizes.w36,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(AppSizes.r100),
                           color: Theme.of(context).colorScheme.primaryContainer,
@@ -179,7 +182,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onTap: () async {
               PreferencesManager().remove(StorageKey.userName);
               PreferencesManager().remove(StorageKey.motivationQuote);
-              PreferencesManager().remove(StorageKey.tasks);
+              await FileStorageManager().clear();
+
+              if(!context.mounted) return;
+              context.read<TasksController>().clearTasks();
+
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(

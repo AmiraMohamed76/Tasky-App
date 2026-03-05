@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:tasky_app/core/constants/app_sizes.dart';
 import 'package:tasky_app/core/enums/task_item_actions_enum.dart';
+import 'package:tasky_app/core/services/file_storage_manager.dart';
 import 'package:tasky_app/core/services/theme_controller.dart';
 import 'package:tasky_app/model/task_model.dart';
 
@@ -202,14 +203,8 @@ class TaskItemWidget extends StatelessWidget {
                       onPressed: () async {
                         if (key.currentState?.validate() ?? false) {
                           // check by key {tasks} -> String?
-                            final taskJson = PreferencesManager().getString(StorageKey.tasks);
 
-                            List<dynamic> tasksList = []; // List<Map<String, dynamic>>
-
-                            // check if there is tasks and decode string to map
-                            if (taskJson != null) {
-                              tasksList = jsonDecode(taskJson);
-                            }
+                            List<dynamic> tasksList = await FileStorageManager().loadTasks(); // List<Map<String, dynamic>>
 
                             // to edit TaskModel to save newModel after editing in sharedPreference
                             final editedTask = TaskModel(
@@ -228,9 +223,7 @@ class TaskItemWidget extends StatelessWidget {
                             // replace item after Editing
                             tasksList[index] = editedTask;
 
-                            // covert this list to string to save it in SharedPreference
-                            final tasksListEncode = jsonEncode(tasksList);
-                            await PreferencesManager().setString(StorageKey.tasks, tasksListEncode);
+                            await FileStorageManager().saveTasks(tasksList);
 
                             if(!context.mounted) return;
                             Navigator.of(context).pop(true);

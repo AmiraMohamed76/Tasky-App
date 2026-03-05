@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:tasky_app/features/tasks/controller/tasks_controller.dart';
+import '../../../core/constants/app_sizes.dart';
 import '../../../core/services/theme_controller.dart';
 
 class AchievedTaskWidget extends StatelessWidget {
@@ -16,14 +17,14 @@ class AchievedTaskWidget extends StatelessWidget {
           width: double.infinity,
           decoration: BoxDecoration(
             color: Theme.of(context).colorScheme.primaryContainer,
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(AppSizes.r20),
             border: Border.all(
               color: ThemeController.isDark()
                   ? Colors.transparent
                   : Color(0xFFD1DAD6),
             ),
           ),
-          padding: EdgeInsets.all(16),
+          padding: EdgeInsets.all(AppSizes.pw16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -47,8 +48,8 @@ class AchievedTaskWidget extends StatelessWidget {
                     angle: -pi / 2,
                     // to rotate progress to start from top left
                     child: SizedBox(
-                      width: 48,
-                      height: 48,
+                      width: AppSizes.w42,
+                      height: AppSizes.h48,
                       child: CircularProgressIndicator(
                         value: value.precent,
                         backgroundColor: Theme.of(context).colorScheme.onSurface,

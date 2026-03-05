@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:tasky_app/features/tasks/controller/tasks_controller.dart';
 import 'package:tasky_app/core/components/task_list_widget.dart';
 
+import '../../core/constants/app_sizes.dart';
+
 
 class ToDoTasksScreen extends StatelessWidget {
   const ToDoTasksScreen({super.key});
@@ -15,7 +17,7 @@ class ToDoTasksScreen extends StatelessWidget {
       children: [
         Center(
           child: Padding(
-            padding: const EdgeInsets.all(18.0),
+            padding: EdgeInsets.all(AppSizes.pw18),
             child: Text(
               "To Do Tasks",
               style: Theme.of(context).textTheme.labelSmall,
@@ -24,7 +26,7 @@ class ToDoTasksScreen extends StatelessWidget {
         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.all(AppSizes.pw16),
             child: controller.isLoading
                 ? Center(
               child: CircularProgressIndicator(color: Color(0xFFFFFCFC)),

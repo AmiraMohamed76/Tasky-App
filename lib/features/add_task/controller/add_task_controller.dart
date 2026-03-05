@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:tasky_app/core/services/file_storage_manager.dart';
 
 import '../../../core/constants/storage_key.dart';
 import '../../../core/services/preferences_manager.dart';
@@ -18,14 +19,7 @@ class AddTaskController extends ChangeNotifier {
   void addTask(BuildContext context) async {
     if (key.currentState?.validate() ?? false) {
       // check by key {tasks} -> String?
-      final taskJson = PreferencesManager().getString(StorageKey.tasks);
-
-      List<dynamic> tasksList = []; // List<Map<String, dynamic>>
-
-      // check if there is tasks and decode string to map
-      if (taskJson != null) {
-        tasksList = jsonDecode(taskJson);
-      }
+      final tasksList = await FileStorageManager().loadTasks();
 
       // to create TaskModel to save in sharedPreference
       final task = TaskModel(
@@ -38,11 +32,10 @@ class AddTaskController extends ChangeNotifier {
       // to covert data from Model to Map<key, value>
       tasksList.add(task.toJson());
 
-      // covert this list to string to save it in SharedPreference
-      final tasksListEncode = jsonEncode(tasksList);
-      await PreferencesManager().setString(StorageKey.tasks, tasksListEncode);
+      FileStorageManager().saveTasks(tasksList);
 
       // navigation with result (true) value to check on this result on HomeScreen to check if add task will loadTasks again to update list
+      if(!context.mounted) return;
       Navigator.of(context).pop(true);
     }
 

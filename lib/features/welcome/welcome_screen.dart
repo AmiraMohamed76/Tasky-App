@@ -5,6 +5,8 @@ import 'package:tasky_app/core/widgets/custom_svg_picture.dart';
 import 'package:tasky_app/core/widgets/custom_text_form_field.dart';
 import 'package:tasky_app/features/navigation/main_screen.dart';
 
+import '../../core/constants/app_sizes.dart';
+
 class WelcomeScreen extends StatelessWidget {
   WelcomeScreen({super.key});
 
@@ -22,23 +24,23 @@ class WelcomeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 16),
+                  SizedBox(height: AppSizes.h16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       CustomSvgPicture.withoutColor(
                         imagePath: "assets/images/logo.svg",
-                        height: 42,
-                        width: 42,
+                        height: AppSizes.h42,
+                        width: AppSizes.w42,
                       ),
-                      SizedBox(width: 16),
+                      SizedBox(width: AppSizes.w16),
                       Text(
                         "Tasky",
                         style: Theme.of(context).textTheme.displayMedium,
                       ),
                     ],
                   ),
-                  SizedBox(height: 118),
+                  SizedBox(height: AppSizes.h108),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -51,23 +53,22 @@ class WelcomeScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: AppSizes.h8),
                   Text(
                     "Your productivity journey starts here.",
                     style: Theme.of(
                       context,
-                    ).textTheme.displaySmall!.copyWith(fontSize: 16),
+                    ).textTheme.displaySmall!.copyWith(fontSize: AppSizes.sp16),
                   ),
-                  SizedBox(height: 24),
+                  SizedBox(height: AppSizes.h24),
                   CustomSvgPicture.withoutColor(
                     imagePath: "assets/images/welcome.svg",
-                    width: 215,
-                    height: 200,
+                    width: AppSizes.w200,
+                    height: AppSizes.h200,
                   ),
-
-                  SizedBox(height: 24),
+                  SizedBox(height: AppSizes.h24),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.all(AppSizes.w16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -82,7 +83,7 @@ class WelcomeScreen extends StatelessWidget {
                             return null;
                           },
                         ),
-                        SizedBox(height: 24),
+                        SizedBox(height: AppSizes.h24),
                         ElevatedButton(
                           onPressed: () async {
                             if (_key.currentState?.validate() ?? false) {
@@ -90,7 +91,7 @@ class WelcomeScreen extends StatelessWidget {
                                 StorageKey.userName,
                                 controller.value.text,
                               );
-
+                              if (!context.mounted) return;
                               Navigator.pushReplacement(
                                 // Because it's welcome screen and i don't want user to get back on it
                                 context,
@@ -102,12 +103,6 @@ class WelcomeScreen extends StatelessWidget {
                               );
                             }
                           },
-                          style: ElevatedButton.styleFrom(
-                            fixedSize: Size(
-                              MediaQuery.of(context).size.width,
-                              40,
-                            ),
-                          ),
                           child: Text("Let’s Get Started"),
                         ),
                       ],

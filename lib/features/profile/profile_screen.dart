@@ -3,12 +3,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:tasky_app/core/services/file_storage_manager.dart';
 import 'package:tasky_app/core/services/preferences_manager.dart';
 import 'package:tasky_app/core/services/theme_controller.dart';
 import 'package:tasky_app/core/widgets/custom_svg_picture.dart';
 import 'package:tasky_app/features/profile/user_details_screen.dart';
+import 'package:tasky_app/features/tasks/controller/tasks_controller.dart';
 import 'package:tasky_app/features/welcome/welcome_screen.dart';
 
+import '../../core/constants/app_sizes.dart';
 import '../../core/constants/storage_key.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -46,20 +50,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding:  EdgeInsets.all(AppSizes.pw16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Center(
             child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
+              padding: EdgeInsets.only(top: AppSizes.ph8),
               child: Text(
                 "My Profile",
                 style: Theme.of(context).textTheme.labelSmall,
               ),
             ),
           ),
-          SizedBox(height: 16),
+          SizedBox(height: AppSizes.ph16),
           Center(
             child: Column(
               children: [
@@ -79,7 +83,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         backgroundImage: userImagePath == null
                             ? AssetImage("assets/images/person.png")
                             : FileImage(File(userImagePath!)),
-                        radius: 60,
+                        radius: AppSizes.r60,
                         backgroundColor: Colors.transparent,
                       ),
                     ),
@@ -94,10 +98,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         });
                       },
                       child: Container(
-                        width: 36,
-                        height: 36,
+                        width: AppSizes.w36,
+                        height: AppSizes.w36,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
+                          borderRadius: BorderRadius.circular(AppSizes.r100),
                           color: Theme.of(context).colorScheme.primaryContainer,
                           border: Border.all(
                             color: Theme.of(context).colorScheme.primary,
@@ -112,7 +116,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ],
                 ),
-                SizedBox(height: 6),
+                SizedBox(height: AppSizes.h6),
                 isLoading
                     ? CircularProgressIndicator()
                     : Column(
@@ -121,7 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             username,
                             style: Theme.of(context).textTheme.labelSmall,
                           ),
-                          SizedBox(height: 4),
+                          SizedBox(height: AppSizes.h4),
                           Text(
                             motivationQuote,
                             style: Theme.of(context).textTheme.titleSmall,
@@ -131,7 +135,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
           ),
-          SizedBox(height: 24),
+          SizedBox(height: AppSizes.h24),
           Text("Profile Info", style: Theme.of(context).textTheme.labelSmall),
           ListTile(
             onTap: () async {
@@ -178,7 +182,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onTap: () async {
               PreferencesManager().remove(StorageKey.userName);
               PreferencesManager().remove(StorageKey.motivationQuote);
-              PreferencesManager().remove(StorageKey.tasks);
+              await FileStorageManager().clear();
+
+              if(!context.mounted) return;
+              context.read<TasksController>().clearTasks();
+
               Navigator.pushAndRemoveUntil(
                 context,
                 MaterialPageRoute(
@@ -230,12 +238,12 @@ void showImageSourceDialog(BuildContext context, Function(XFile) selectedFile) {
             child: Row(
               children: [
                 CustomSvgPicture(imagePath: "assets/images/camera.svg"),
-                SizedBox(width: 8),
+                SizedBox(width: AppSizes.w8),
                 Text("Camera", style: Theme.of(context).textTheme.titleMedium),
               ],
             ),
           ),
-          SizedBox(height: 10),
+          SizedBox(height: AppSizes.h10),
           SimpleDialogOption(
             onPressed: () async {
               Navigator.pop(context);
@@ -249,7 +257,7 @@ void showImageSourceDialog(BuildContext context, Function(XFile) selectedFile) {
             child: Row(
               children: [
                 Icon(Icons.photo_library_outlined),
-                SizedBox(width: 8),
+                SizedBox(width: AppSizes.w8),
                 Text("Gallery", style: Theme.of(context).textTheme.titleMedium),
               ],
             ),

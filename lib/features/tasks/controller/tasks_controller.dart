@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:tasky_app/core/services/file_storage_manager.dart';
 
 import '../../../core/constants/storage_key.dart';
 import '../../../core/services/preferences_manager.dart';
@@ -24,18 +25,14 @@ class TasksController extends ChangeNotifier {
   void _loadTasks() async {
     isLoading = true;
 
-    final tasksList = PreferencesManager().getString(StorageKey.tasks);
-    if (tasksList != null) {
-      // to covert string to List<Map<String, dynamic>>
-      final taskAfterDecode = jsonDecode(tasksList) as List<dynamic>;
-      tasks = taskAfterDecode
+    final tasksList = await FileStorageManager().loadTasks();
+      tasks = tasksList
           .map((element) => TaskModel.fromJson(element))
           .toList();
 
       _loadData();
 
       _calculatePrecent();
-    }
 
     isLoading = false;
     notifyListeners();
@@ -59,10 +56,7 @@ class TasksController extends ChangeNotifier {
     /// on the contrary in todoScreen and completeScreen i need to know the actual index from fullList
     /// and index in the screenList and match them to update correct item
     final updatedTasksList = tasks.map((element) => element.toJson()).toList();
-    await PreferencesManager().setString(
-      StorageKey.tasks,
-      jsonEncode(updatedTasksList),
-    );
+    await FileStorageManager().saveTasks(updatedTasksList);
 
     notifyListeners();
   }
@@ -76,10 +70,7 @@ class TasksController extends ChangeNotifier {
     _calculatePrecent();
 
     final updatedTasks = tasks.map((e) => e.toJson()).toList();
-    await PreferencesManager().setString(
-      StorageKey.tasks,
-      jsonEncode(updatedTasks),
-    );
+    await FileStorageManager().saveTasks(updatedTasks);
 
     notifyListeners();
   }
@@ -92,4 +83,10 @@ class TasksController extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  void clearTasks() {
+    _loadTasks();
+  }
+
+
 }

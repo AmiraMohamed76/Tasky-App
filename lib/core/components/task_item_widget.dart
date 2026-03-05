@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:tasky_app/core/constants/app_sizes.dart';
 import 'package:tasky_app/core/enums/task_item_actions_enum.dart';
+import 'package:tasky_app/core/services/file_storage_manager.dart';
 import 'package:tasky_app/core/services/theme_controller.dart';
 import 'package:tasky_app/model/task_model.dart';
 
@@ -27,18 +29,18 @@ class TaskItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 56,
+      height: AppSizes.h56,
       width: double.infinity,
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(20),
+        borderRadius: BorderRadius.circular(AppSizes.r20),
         border: Border.all(color: Theme.of(context).colorScheme.primary),
       ),
       child: Row(
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 16.0, left: 8),
+            padding: EdgeInsets.only(right: AppSizes.w16, left: AppSizes.w8),
             child: CustomCheckBox(
               value: task.isDone,
               onChanged: (bool? value) => onChanged(value),
@@ -71,7 +73,7 @@ class TaskItemWidget extends StatelessWidget {
               color: ThemeController.isDark()
                   ? (task.isDone ? Color(0xFFA0A0A0) : Color(0xFFC6C6C6))
                   : (task.isDone ? Color(0xFF6A6A6A) : Color(0xFF3A4640)),
-              size: 24,
+              size: AppSizes.r24,
             ),
             onSelected: (value) async {
               switch (value) {
@@ -106,7 +108,7 @@ class TaskItemWidget extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text("Cancel", style: TextStyle(fontSize: 18)),
+              child: Text("Cancel", style: TextStyle(fontSize: AppSizes.sp18)),
             ),
             TextButton(
               onPressed: () {
@@ -114,7 +116,7 @@ class TaskItemWidget extends StatelessWidget {
                 Navigator.pop(context);
               },
               style: TextButton.styleFrom(foregroundColor: Colors.red),
-              child: Text("Delete", style: TextStyle(fontSize: 18)),
+              child: Text("Delete", style: TextStyle(fontSize: AppSizes.sp18)),
             ),
           ],
         );
@@ -123,7 +125,6 @@ class TaskItemWidget extends StatelessWidget {
   }
 
   Future<bool?> _showBottomSheet(BuildContext context, TaskModel task) {
-    print("TaskId: ${task.id} | ${task.taskName} |${task.taskDescription} |${task.isHighPriority} |${task.isDone}");
     final GlobalKey<FormState> key = GlobalKey<FormState>();
     final TextEditingController taskNameController = TextEditingController(
       text: task.taskName,
@@ -138,11 +139,11 @@ class TaskItemWidget extends StatelessWidget {
         return StatefulBuilder(
           builder: (BuildContext context, void Function(void Function()) setState) {
             return Padding(
-              padding: const EdgeInsets.only(
-                top: 20,
-                left: 16,
-                right: 16,
-                bottom: 8.0,
+              padding: EdgeInsets.only(
+                top: AppSizes.h20,
+                left: AppSizes.w16,
+                right: AppSizes.w16,
+                bottom: AppSizes.h8,
               ),
               child: Form(
                 key: key,
@@ -165,7 +166,7 @@ class TaskItemWidget extends StatelessWidget {
                               },
                               title: "Task Name",
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: AppSizes.h20),
                             CustomTextFormField(
                               controller: taskDescriptionController,
                               hintText:
@@ -173,7 +174,7 @@ class TaskItemWidget extends StatelessWidget {
                               maxLines: 5,
                               title: "Task Description",
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: AppSizes.h20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -202,14 +203,8 @@ class TaskItemWidget extends StatelessWidget {
                       onPressed: () async {
                         if (key.currentState?.validate() ?? false) {
                           // check by key {tasks} -> String?
-                            final taskJson = PreferencesManager().getString(StorageKey.tasks);
 
-                            List<dynamic> tasksList = []; // List<Map<String, dynamic>>
-
-                            // check if there is tasks and decode string to map
-                            if (taskJson != null) {
-                              tasksList = jsonDecode(taskJson);
-                            }
+                            List<dynamic> tasksList = await FileStorageManager().loadTasks(); // List<Map<String, dynamic>>
 
                             // to edit TaskModel to save newModel after editing in sharedPreference
                             final editedTask = TaskModel(
@@ -228,16 +223,12 @@ class TaskItemWidget extends StatelessWidget {
                             // replace item after Editing
                             tasksList[index] = editedTask;
 
-                            // covert this list to string to save it in SharedPreference
-                            final tasksListEncode = jsonEncode(tasksList);
-                            await PreferencesManager().setString(StorageKey.tasks, tasksListEncode);
+                            await FileStorageManager().saveTasks(tasksList);
 
+                            if(!context.mounted) return;
                             Navigator.of(context).pop(true);
                         }
                       },
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: Size(MediaQuery.of(context).size.width, 40),
-                      ),
                       label: Text("Edit Task"),
                       icon: Icon(Icons.edit),
                     ),

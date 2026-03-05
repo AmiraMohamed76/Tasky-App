@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../constants/app_sizes.dart';
+
 class CustomTextFormField extends StatelessWidget {
   final TextEditingController controller;
   final int? maxLines;
@@ -26,7 +28,7 @@ class CustomTextFormField extends StatelessWidget {
           title,
           style: Theme.of(context).textTheme.titleSmall
         ),
-        SizedBox(height: 8),
+        SizedBox(height: AppSizes.h8),
         TextFormField(
           controller: controller,
           style: Theme.of(context).textTheme.labelMedium,

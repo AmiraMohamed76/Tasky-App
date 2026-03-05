@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:tasky_app/core/widgets/custom_text_form_field.dart';
 import 'package:tasky_app/features/add_task/controller/add_task_controller.dart';
 
+import '../../core/constants/app_sizes.dart';
+
 
 class AddTaskScreen extends StatelessWidget {
   const AddTaskScreen({super.key});
@@ -18,7 +20,7 @@ class AddTaskScreen extends StatelessWidget {
           appBar: AppBar(title: Text("New Task")),
           body: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8.0),
+              padding: EdgeInsets.all(AppSizes.pw8),
               child: Form(
                 key: controller.key,
                 child: Column(
@@ -40,14 +42,14 @@ class AddTaskScreen extends StatelessWidget {
                               },
                               title: "Task Name",
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: AppSizes.ph20),
                             CustomTextFormField(
                               controller: controller.taskDescriptionController,
                               hintText: 'Finish onboarding UI and hand off to devs by Thursday.',
                               maxLines: 5,
                               title: "Task Description",
                             ),
-                            SizedBox(height: 20),
+                            SizedBox(height: AppSizes.ph20),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -72,9 +74,6 @@ class AddTaskScreen extends StatelessWidget {
                     ),
                     ElevatedButton.icon(
                       onPressed: () => controller.addTask(context),
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: Size(MediaQuery.of(context).size.width, 40),
-                      ),
                       label: Text("Add Task",),
                       icon: Icon(Icons.add),
                     ),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tasky_app/core/constants/app_sizes.dart';
 import 'package:tasky_app/core/widgets/custom_svg_picture.dart';
 import 'package:tasky_app/features/home/controller/home_controller.dart';
 import 'package:tasky_app/features/add_task/add_task_screen.dart';
@@ -19,7 +20,7 @@ class HomeScreen extends StatelessWidget {
       create: (context) => HomeController()..init(),
       child: Scaffold(
         body: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding:  EdgeInsets.all(AppSizes.pw16),
           child: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
@@ -27,20 +28,13 @@ class HomeScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      spacing: 8,
+                      spacing: AppSizes.w8,
                       children: [
                         Selector<HomeController, String?>(
                           selector:
-                              (
-                                BuildContext context,
-                                HomeController controller,
-                              ) => controller.userImagePath,
+                              (BuildContext context, HomeController controller) => controller.userImagePath,
                           builder:
-                              (
-                                BuildContext context,
-                                userImagePath,
-                                Widget? child,
-                              ) {
+                              (BuildContext context, userImagePath, Widget? child) {
                                 return CircleAvatar(
                                   backgroundImage: userImagePath == null
                                       ? AssetImage("assets/images/person.png")
@@ -81,7 +75,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: AppSizes.ph16),
                     Text(
                       "Yuhuu ,Your work Is",
                       style: Theme.of(context).textTheme.displayLarge,
@@ -98,10 +92,10 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),
                     AchievedTaskWidget(),
-                    SizedBox(height: 8),
+                    SizedBox(height: AppSizes.ph8),
                     HighPriorityTasksWidget(),
                     Padding(
-                      padding: const EdgeInsets.only(top: 24, bottom: 16),
+                      padding: EdgeInsets.only(top: AppSizes.ph24, bottom: AppSizes.ph16),
                       child: Text(
                         "My Tasks",
                         style: Theme.of(context).textTheme.labelSmall,
@@ -115,7 +109,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ),
         floatingActionButton: SizedBox(
-          height: 40,
+          height: AppSizes.h40,
           child: Builder(
             builder: (BuildContext controllerContext) {
               return FloatingActionButton.extended(
@@ -128,6 +122,8 @@ class HomeScreen extends StatelessWidget {
                       },
                     ),
                   );
+
+                  if(!context.mounted) return;
                   if (result != null && result) {
                     // we have to use HomeController context coz context is navigation context
                     controllerContext.read<TasksController>().init();
@@ -135,9 +131,7 @@ class HomeScreen extends StatelessWidget {
                 },
                 label: Text("Add New Task"),
                 icon: Icon(Icons.add),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100),
-                ),
+
               );
             },
           ),

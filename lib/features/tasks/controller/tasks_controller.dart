@@ -1,10 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:tasky_app/core/services/file_storage_manager.dart';
-
-import '../../../core/constants/storage_key.dart';
-import '../../../core/services/preferences_manager.dart';
+import '../../../core/services/hive_storage_manager.dart';
 import '../../../model/task_model.dart';
 
 class TasksController extends ChangeNotifier {
@@ -22,17 +17,14 @@ class TasksController extends ChangeNotifier {
     _loadTasks();
   }
 
-  void _loadTasks() async {
+  void _loadTasks() {
     isLoading = true;
 
-    final tasksList = await FileStorageManager().loadTasks();
-      tasks = tasksList
-          .map((element) => TaskModel.fromJson(element))
-          .toList();
+    tasks = HiveStorageManager().loadTasks();
 
-      _loadData();
+    _loadData();
 
-      _calculatePrecent();
+    _calculatePrecent();
 
     isLoading = false;
     notifyListeners();
@@ -52,11 +44,7 @@ class TasksController extends ChangeNotifier {
     _loadData();
     _calculatePrecent();
 
-    /// dealing with the full list so when change isDone State will change in fullList
-    /// on the contrary in todoScreen and completeScreen i need to know the actual index from fullList
-    /// and index in the screenList and match them to update correct item
-    final updatedTasksList = tasks.map((element) => element.toJson()).toList();
-    await FileStorageManager().saveTasks(updatedTasksList);
+    await HiveStorageManager().saveTasks(tasks);
 
     notifyListeners();
   }
@@ -69,8 +57,7 @@ class TasksController extends ChangeNotifier {
     _loadData(); // to update data lists
     _calculatePrecent();
 
-    final updatedTasks = tasks.map((e) => e.toJson()).toList();
-    await FileStorageManager().saveTasks(updatedTasks);
+    await HiveStorageManager().saveTasks(tasks);
 
     notifyListeners();
   }
@@ -87,6 +74,4 @@ class TasksController extends ChangeNotifier {
   void clearTasks() {
     _loadTasks();
   }
-
-
 }

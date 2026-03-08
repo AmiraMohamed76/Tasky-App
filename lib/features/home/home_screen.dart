@@ -122,7 +122,6 @@ class HomeScreen extends StatelessWidget {
                       },
                     ),
                   );
-
                   if(!context.mounted) return;
                   if (result != null && result) {
                     // we have to use HomeController context coz context is navigation context

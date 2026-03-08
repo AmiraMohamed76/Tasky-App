@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:tasky_app/core/services/file_storage_manager.dart';
 import 'package:tasky_app/core/services/preferences_manager.dart';
 import 'package:tasky_app/core/services/theme_controller.dart';
 import 'package:tasky_app/core/widgets/custom_svg_picture.dart';
@@ -14,6 +13,7 @@ import 'package:tasky_app/features/welcome/welcome_screen.dart';
 
 import '../../core/constants/app_sizes.dart';
 import '../../core/constants/storage_key.dart';
+import '../../core/services/hive_storage_manager.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -167,7 +167,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           _buildProfileItem("Log Out", "assets/images/log_out.svg", () async {
             PreferencesManager().remove(StorageKey.userName);
             PreferencesManager().remove(StorageKey.motivationQuote);
-            await FileStorageManager().clear();
+            await HiveStorageManager().clear();
 
             if (!context.mounted) return;
             context.read<TasksController>().clearTasks();
@@ -181,7 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               (Route<dynamic> route) => false,
             );
-          }),
+          }, withDivider: false),
         ],
       ),
     );
@@ -259,7 +259,7 @@ _buildProfileItem(
     children: [
       ListTile(
         onTap: () => onTap(),
-        title: Text("User Details"),
+        title: Text(title),
         leading: CustomSvgPicture(imagePath: leadingImagePath),
         trailing: isDarkMode
             ? ValueListenableBuilder<ThemeMode>(

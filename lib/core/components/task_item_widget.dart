@@ -1,14 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:tasky_app/core/constants/app_sizes.dart';
 import 'package:tasky_app/core/enums/task_item_actions_enum.dart';
-import 'package:tasky_app/core/services/file_storage_manager.dart';
 import 'package:tasky_app/core/services/theme_controller.dart';
 import 'package:tasky_app/model/task_model.dart';
-
-import '../constants/storage_key.dart';
-import '../services/preferences_manager.dart';
+import '../services/hive_storage_manager.dart';
 import '../widgets/custom_check_box.dart';
 import '../widgets/custom_text_form_field.dart';
 
@@ -204,7 +199,7 @@ class TaskItemWidget extends StatelessWidget {
                         if (key.currentState?.validate() ?? false) {
                           // check by key {tasks} -> String?
 
-                            List<dynamic> tasksList = await FileStorageManager().loadTasks(); // List<Map<String, dynamic>>
+                            List<TaskModel> tasksList = HiveStorageManager().loadTasks(); // List<Map<String, dynamic>>
 
                             // to edit TaskModel to save newModel after editing in sharedPreference
                             final editedTask = TaskModel(
@@ -216,14 +211,14 @@ class TaskItemWidget extends StatelessWidget {
                             );
 
                             // to search about item using id in Map<key, value>   ///  to search about item using id in List<TaskModel>
-                            final item = tasksList.firstWhere((e) => e['id'] == task.id);
+                            final item = tasksList.firstWhere((e) => e.id == task.id);
                             /// = tasksList.map((e) => TaskModel.fromJson(e)).toList().firstWhere((element) => element.id == task.id);
 
                             final index = tasksList.indexOf(item);
                             // replace item after Editing
                             tasksList[index] = editedTask;
 
-                            await FileStorageManager().saveTasks(tasksList);
+                            await HiveStorageManager().saveTasks(tasksList);
 
                             if(!context.mounted) return;
                             Navigator.of(context).pop(true);

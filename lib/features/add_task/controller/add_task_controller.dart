@@ -1,10 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:tasky_app/core/services/file_storage_manager.dart';
-
-import '../../../core/constants/storage_key.dart';
-import '../../../core/services/preferences_manager.dart';
+import '../../../core/services/hive_storage_manager.dart';
 import '../../../model/task_model.dart';
 
 class AddTaskController extends ChangeNotifier {
@@ -19,7 +14,7 @@ class AddTaskController extends ChangeNotifier {
   void addTask(BuildContext context) async {
     if (key.currentState?.validate() ?? false) {
       // check by key {tasks} -> String?
-      final tasksList = await FileStorageManager().loadTasks();
+      List<TaskModel> tasksList = HiveStorageManager().loadTasks();
 
       // to create TaskModel to save in sharedPreference
       final task = TaskModel(
@@ -29,10 +24,9 @@ class AddTaskController extends ChangeNotifier {
         isHighPriority: isHighPriority,
       );
 
-      // to covert data from Model to Map<key, value>
-      tasksList.add(task.toJson());
+      tasksList.add(task);
 
-      FileStorageManager().saveTasks(tasksList);
+      await HiveStorageManager().saveTasks(tasksList);
 
       // navigation with result (true) value to check on this result on HomeScreen to check if add task will loadTasks again to update list
       if(!context.mounted) return;

@@ -227,6 +227,7 @@ class TaskItemWidget extends StatelessWidget {
                       label: Text("Edit Task"),
                       icon: Icon(Icons.edit),
                     ),
+                    SizedBox(height: AppSizes.ph8,)
                   ],
                 ),
               ),

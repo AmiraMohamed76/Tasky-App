@@ -48,8 +48,8 @@ class AchievedTaskWidget extends StatelessWidget {
                     angle: -pi / 2,
                     // to rotate progress to start from top left
                     child: SizedBox(
-                      width: AppSizes.w42,
-                      height: AppSizes.h48,
+                      width: AppSizes.w48,
+                      height: AppSizes.w48,
                       child: CircularProgressIndicator(
                         value: value.precent,
                         backgroundColor: Theme.of(context).colorScheme.onSurface,

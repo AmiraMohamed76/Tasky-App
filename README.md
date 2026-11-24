@@ -6,5 +6,7 @@ Key Features:
 Create, edit, and delete daily tasks Mark tasks as completed Clean and intuitive UI Designed for productivity and focus Lightweight and easy to use
 
 This project is ideal for practicing task management logic, clean UI design, and state management concepts.
-<img width="4158" height="2160" alt="Group 7 (2)" src="https://github.com/user-attachments/assets/8b9fd912-d099-48ba-a51a-6a6f434fa709" />
+<img width="800" height="533" alt="tasky app" src="https://github.com/user-attachments/assets/d43871af-1b89-4643-89b2-4f6b3f55d210" />
+
+" />
 
